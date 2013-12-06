@@ -14,7 +14,7 @@ var load_img = function($q, src) {
 };
 
 angular.module('hellbergApp')
-  .controller('TripCtrl', ['$scope', '$routeParams', '$q', 'Questions', function ($scope, $routeParams, $q, Questions) {
+  .controller('TripCtrl', ['$scope', '$routeParams', '$q', '$timeout', 'Questions', function ($scope, $routeParams, $q, $timeout, Questions) {
 
     var dfd1 = $q.defer();
 
@@ -67,7 +67,17 @@ angular.module('hellbergApp')
           }
           console.log(imgdfds);
           $q.all(imgdfds).then(function() {
-            console.log("LOADED");
+            var idx = 0;
+            var stop;
+            var func = function() {
+              $scope.img_url = imgurls[idx];
+              console.log("hej");
+              idx++;
+              if (idx >= idx) {
+                stop = $timeout(func, 100);
+              }
+            };
+            stop = $timeout(func, 100);
           });
         } else {
           // [todo] - error
