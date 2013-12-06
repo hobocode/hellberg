@@ -16,6 +16,10 @@ var load_img = function($q, src) {
 angular.module('hellbergApp')
   .controller('TripCtrl', ['$scope', '$routeParams', '$q', '$timeout', 'Questions', function ($scope, $routeParams, $q, $timeout, Questions) {
 
+    $scope.points = 10;
+
+    $scope.question = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempor orci porttitor enim ultricies semper. Nulla turpis nibh, eleifend et sapien sit amet, ullamcorper molestie nulla.";
+
     var dfd1 = $q.defer();
 
     var service = new google.maps.places.PlacesService($("#attribution")[0]);
