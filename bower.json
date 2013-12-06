@@ -11,7 +11,8 @@
     "angular-cookies": "~1.2.0",
     "angular-sanitize": "~1.2.0",
     "angular-route": "~1.2.0",
-    "levenshtein": "~1.0.2"
+    "levenshtein": "~1.0.2",
+    "sprintf": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
