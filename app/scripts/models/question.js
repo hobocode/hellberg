@@ -5,7 +5,7 @@ var Question = function(options) {
   }
 
   var defaults = {
-    index: 0,
+    index: -1,
     question: null,
     answer: null
   };
