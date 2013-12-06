@@ -7,7 +7,7 @@ angular.module('hellbergApp')
 
     $scope.trip = function() {
       console.log("hej", $scope.detail1);
-      $location.path('/trip/' + $scope.detail1.id + '/' + $scope.detail2.id + '/');
+      $location.path('/trip/' + $scope.detail1.reference + '/' + $scope.detail2.reference + '/');
     };
 
   }]);
