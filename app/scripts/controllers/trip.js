@@ -29,6 +29,9 @@ angular.module('hellbergApp')
     });
 
     $q.all([dfd1.promise, dfd2.promise]).then(function(res) {
+
+      var questions = Questions.fetch(res[0].name, res[1].name, []);
+
       var directionsService = new google.maps.DirectionsService();
 
       var request = {
