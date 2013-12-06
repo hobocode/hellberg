@@ -3,10 +3,17 @@
   <div class="form-group">
     <h1>Select from and to</h1>
 
-    <input type="text" class="form-control" ng-autocomplete="name1" details="detail1" options="options" placeholder="Point of departure" />
-    <input type="text" class="form-control" ng-autocomplete="name2" details="detail2" options="options" placeholder="Destination" />
-
-    <a class="btn btn-primary" href="" ng-click="trip()">Go!</a>
+    <form role="form">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Point of departure</label>
+        <input type="text" class="form-control" ng-autocomplete="name1" details="detail1" options="options" placeholder="Berlin" />
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Destination</label>
+        <input type="text" class="form-control" ng-autocomplete="name2" details="detail2" options="options" placeholder="Düsseldorf" />
+      </div>
+      <button type="submit" class="btn btn-primary">Go!</button>
+    </form>
   </div>
 </div>
 
