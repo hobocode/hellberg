@@ -1,11 +1,3 @@
-/*
- *
- *
- *
- *
- *
- */
-
 
 QuestionSet = function(options) {
   if (typeof options === 'undefined' || options === null) {
