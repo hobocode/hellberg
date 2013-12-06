@@ -4,7 +4,8 @@ angular.module('hellbergApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'ngAutocomplete'
 ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -12,11 +13,10 @@ angular.module('hellbergApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/trip', {
+      .when('/trip/:place1/:place2/', {
         templateUrl: 'views/trip.html',
         controller: 'TripCtrl'
       })
-
       .otherwise({
         redirectTo: '/'
       });
