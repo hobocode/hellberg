@@ -12,6 +12,11 @@ angular.module('hellbergApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/trip', {
+        templateUrl: 'views/trip.html',
+        controller: 'TripCtrl'
+      })
+
       .otherwise({
         redirectTo: '/'
       });
