@@ -6,7 +6,6 @@ angular.module('hellbergApp')
     $scope.detail2 = "";
 
     $scope.trip = function() {
-      console.log("hej", $scope.detail1);
       $location.path('/trip/' + $scope.detail1.reference + '/' + $scope.detail2.reference + '/');
     };
 

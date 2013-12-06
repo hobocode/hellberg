@@ -1,7 +1,20 @@
 'use strict';
 
+var load_img = function($q, src) {
+  var img = new Image();
+  var dfd = $q.defer();
+
+  img.onload = function(){
+    dfd.resolve();
+  };
+
+  img.src = src;
+
+  return dfd.promise;
+};
+
 angular.module('hellbergApp')
-  .controller('TripCtrl', ['$scope', '$routeParams', '$q', function ($scope, $routeParams, $q) {
+  .controller('TripCtrl', ['$scope', '$routeParams', '$q', 'Questions', function ($scope, $routeParams, $q, Questions) {
 
     var dfd1 = $q.defer();
 
@@ -19,15 +32,43 @@ angular.module('hellbergApp')
       var directionsService = new google.maps.DirectionsService();
 
       var request = {
-        origin:res[0].name,
-        destination:res[0].name,
+        origin: res[0].name,
+        destination: res[1].name,
         travelMode: google.maps.TravelMode.DRIVING
       };
 
       directionsService.route(request, function(result, status) {
+        var points = [];
+
         if (status == google.maps.DirectionsStatus.OK) {
           var route = result.routes[0];
-          console.log("route", route);
+          var steps = route.legs[0].steps;
+          for (var idx in steps) {
+            var step = steps[idx];
+            console.log(step);
+            points.push(step.start_point);
+            points.push(step.end_point);
+          }
+
+          var imgurls = [];
+
+          for (var imgidx in points) {
+            var point = points[imgidx];
+            var lat = point.lat();
+            var lng = point.lng();
+            var imgurl = "http://maps.googleapis.com/maps/api/streetview?size=600x300&location=" + lat + "," + lng + "&heading=151.78&pitch=-0.76&sensor=false";
+            imgurls.push(imgurl);
+          }
+
+          var imgdfds = [];
+          for (var imgidx in imgurls) {
+            var url = imgurls[imgidx];
+            imgdfds.push(load_img($q, url));
+          }
+          console.log(imgdfds);
+          $q.all(imgdfds).then(function() {
+            console.log("LOADED");
+          });
         } else {
           // [todo] - error
         }
