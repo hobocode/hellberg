@@ -74,9 +74,8 @@ angular.module('hellbergApp')
             var stop;
             var func = function() {
               $scope.img_url = imgurls[idx];
-              console.log("hej");
               idx++;
-              if (idx >= idx) {
+              if (idx < imgurls.length) {
                 stop = $timeout(func, 100);
               }
             };
