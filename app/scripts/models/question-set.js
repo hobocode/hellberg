@@ -1,5 +1,5 @@
 
-QuestionSet = function(options) {
+var QuestionSet = function(options) {
   if (typeof options === 'undefined' || options === null) {
     options = {};
   }
@@ -35,3 +35,8 @@ QuestionSet.prototype.setQuestion = function(question, idx) {
 QuestionSet.prototype.add = function(question) {
   return this.push(question);
 };
+
+
+var Hellberg = window.Hellberg || {};
+Hellberg.QuestionSet = QuestionSet;
+window.Hellberg = Hellberg;

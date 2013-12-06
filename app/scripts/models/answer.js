@@ -1,5 +1,5 @@
 
-Answer = function(options) {
+var Answer = function(options) {
   if (typeof options === 'undefined' || options === null) {
     options = {};
   }
@@ -96,3 +96,7 @@ Answer.prototype.score_threshold = function(answer) {
 
   return mean_length * this.threshold_value();
 };
+
+var Hellberg = window.Hellberg || {};
+Hellberg.Answer = Answer;
+window.Hellberg = Hellberg;

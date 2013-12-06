@@ -1,5 +1,5 @@
 
-Question = function(options) {
+var Question = function(options) {
   if (typeof options === 'undefined' || options === null) {
     options = {};
   }
@@ -7,7 +7,7 @@ Question = function(options) {
   var defaults = {
     index: 0,
     question: null,
-    answer: null,
+    answer: null
   };
 
   for (var key in defaults) {
@@ -35,20 +35,29 @@ Question.prototype.validate_answer = function(answer) {
 };
 
 
-// var q = new Question({
-//   answer: new Answer({
-//     answers: [
-//       'Jag heter Gustaf',
-//       'Jag heter Simon',
-//       'Jag schmeter schumstis',
-//     ],
-//     index: 4,
-//   })
-// });
+var ImageQuestion = function(options) {
+  Question.call(this, options);
 
-// var r = q.validate_answer('Jag heter Schuzu');
-// var s = q.validate_answer('asfoajasoih asuh');
+  var defaults = {
+    image: null
+  };
 
-// console.log(r);
-// console.log(s);
+  for (var key in defaults) {
+    var value = null;
+    if (key in options) {
+      value = options[key];
+    } else {
+      value = defaults[key];
+    }
 
+    this[key] = value;
+  }
+};
+ImageQuestion.prototype = new Question();
+ImageQuestion.prototype.constructor = Question;
+
+
+var Hellberg = window.Hellberg || {};
+Hellberg.Question = Question;
+Hellberg.ImageQuestion = ImageQuestion;
+window.Hellberg = Hellberg;

@@ -1,5 +1,5 @@
 
-QuestionTemplate = function(options) {
+var QuestionTemplate = function(options) {
   if (typeof options === 'undefined' || options === null) {
     options = {};
   }
@@ -23,3 +23,7 @@ QuestionTemplate = function(options) {
 QuestionTemplate.prototype.template = function() {
   return this.template_string;
 };
+
+var Hellberg = window.Hellberg || {};
+Hellberg.QuestionTemplate = QuestionTemplate;
+window.Hellberg = Hellberg;
