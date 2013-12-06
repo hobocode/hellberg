@@ -6,6 +6,7 @@ var QuestionTemplate = function(options) {
 
   var defaults = {
     template_string: null,
+    location: null,
   };
 
   for (var key in defaults) {

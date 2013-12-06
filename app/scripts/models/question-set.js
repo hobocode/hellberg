@@ -29,11 +29,16 @@ QuestionSet.prototype.getQuestion = function(idx) {
 };
 
 QuestionSet.prototype.setQuestion = function(question, idx) {
+  question.index = idx;
   return this.questions[idx] = question;
 };
 
 QuestionSet.prototype.add = function(question) {
-  return this.push(question);
+  if (question.index < 0) {
+    question.index = this.questions.length;
+  }
+
+  return this.questions.push(question);
 };
 
 
