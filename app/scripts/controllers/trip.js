@@ -16,7 +16,22 @@ angular.module('hellbergApp')
     });
 
     $q.all([dfd1.promise, dfd2.promise]).then(function(res) {
-      console.log("all", res);
+      var directionsService = new google.maps.DirectionsService();
+
+      var request = {
+        origin:res[0].name,
+        destination:res[0].name,
+        travelMode: google.maps.TravelMode.DRIVING
+      };
+
+      directionsService.route(request, function(result, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          var route = result.routes[0];
+          console.log("route", route);
+        } else {
+          // [todo] - error
+        }
+      });
     });
 
   }]);
