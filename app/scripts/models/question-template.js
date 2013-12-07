@@ -34,27 +34,44 @@ var QuestionTemplate = function(options) {
 };
 
 QuestionTemplate.prototype.template = function() {
-  return this.§;
+  return this.template_string;
 };
 
-QuestionTemplate.prototype.departure_synonyms = function() {
-  return [
+QuestionTemplate.prototype.departure_synonyms = [
     // "Vår resa tar sin början i en ort som",
     // "Vi lämnar en ort som",
     // "Vi reser från en ort som"
-    "Vår avfärdsort",
-    "Vår utgångsort"
+    "our point of departure",
+    "our starting location"
   ];
-};
 
-QuestionTemplate.prototype.destination_synonyms = function() {
-  return [
+QuestionTemplate.prototype.destination_synonyms = [
     // "Vi är på väg till en ort som",
     // "Vi rör oss mot en ort som",
-    "Vårt resmål",
-    "Resans mål",
-    "Vår destination"
+    "our destination",
+    "the destination of our trip"
   ];
+
+QuestionTemplate.prototype.departure_synonym = function(idx) {
+  return this._random_array_idx(this.departure_synonyms, idx);
+};
+
+QuestionTemplate.prototype.destination_synonym = function(idx) {
+  return this._random_array_idx(this.destination_synonyms, idx);
+};
+
+QuestionTemplate.prototype._random_array_idx = function(data, idx) {
+  if (typeof data === 'undefined' || data === null) {
+    data = [];
+  }
+
+  if (typeof idx === 'undefined' || idx === null) {
+    idx = -1;
+  }
+
+  if (data.length) {
+    return data[Math.floor(Math.random() * data.length)];
+  }
 };
 
 
@@ -68,7 +85,7 @@ var VenueQuestionTemplate = function(options) {
   QuestionTemplate.call(this, options);
 
   var defaults = {
-    format: '%s is a popular %s på %s',
+    format: '%s is a popular %s at %s',
     name: null,
     category: null
   };
@@ -89,7 +106,7 @@ VenueQuestionTemplate.prototype = new QuestionTemplate();
 VenueQuestionTemplate.prototype.constructor = QuestionTemplate;
 
 VenueQuestionTemplate.prototype.question = function() {
-  return sprintf(this.format, this.name, this.category, this.departure_synonyms[1]);
+  return sprintf(this.format, this.name, this.category.toLowerCase(), this.departure_synonym().toLowerCase());
 };
 
 
@@ -97,3 +114,12 @@ var Hellberg = window.Hellberg || {};
 Hellberg.QuestionTemplate = QuestionTemplate;
 Hellberg.VenueQuestionTemplate = VenueQuestionTemplate;
 window.Hellberg = Hellberg;
+
+
+
+// vqt = new VenueQuestionTemplate({
+//   name: 'Solde',
+//   category: 'Cafe'
+// });
+
+// console.log(vqt.question());
