@@ -147,11 +147,32 @@ var FactQuestionTemplate = function(options) {
 FactQuestionTemplate.prototype = new QuestionTemplate();
 FactQuestionTemplate.prototype.constructor = QuestionTemplate;
 
+FactQuestionTemplate.prototype.template_fillers = [
+  'Humpty-Dumpty',
+  'Schmoodie',
+  'Bogus',
+  'Hocus Pocus',
+  'Rickety Roo'
+];
+
 FactQuestionTemplate.prototype.question = function() {
 
-  // return this.format;
+  var shuffle_array = function(o){
+      for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+      return o;
+  };
 
-  var q = sprintf(this.format, this.destination_synonym());
+  var params = [
+    this.format,
+    this.destination_synonym()
+  ];
+
+  var fillers = this.template_fillers;
+  fillers = shuffle_array(fillers);
+
+  params.push.apply(params, fillers);
+
+  var q = sprintf.apply(this, params);
   return q.capitalize();
 };
 

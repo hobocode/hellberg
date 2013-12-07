@@ -1,10 +1,6 @@
 
 var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LOCALE', function($http, $q, LOCALE) {
-  var instance = {
-    departure_name: null,
-    destination_name: null,
-    points: []
-  }
+  var instance = { }
 
   var FOURSQUARE_API_ACCESS_TOKEN = "SL5IPGO1JG5XW1NU0QT1BQY1ESDO1HI13HXSS5EBRKFP1DXS";
   var FOURSQUARE_API_CLIENT_ID = "MURHMAGAPKW5ZAXYEEPFC30BALAU0D4CZYLRRWOMEKIDLV2C";
@@ -39,32 +35,26 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
   instance.fetch = function(departure_name, destination_name, points) {
 
-    console.log("POINTS:", points);
+    var dep = new Hellberg.TripLocation({
+      name: departure_name,
+      coordinate: {
+        lat: points.length ? points[0].lat : 0.0,
+        lng: points.length ? points[0].lng : 0.0
+      }
+    });
 
-    // if (points.length < 1) {
-    //   return false;
-    // }
-
-    // var dep = new Hellberg.TripLocation({
-    //   name: departure_name,
-    //   coordinate: {
-    //     lat: points[0].lat,
-    //     lng: points[0].lng
-    //   }
-    // });
-
-    // var dest = new Hellberg.TripLocation({
-    //   name: destination_name,
-    //   coordinate: {
-    //     lat: points[(points.length - 1)].lat,
-    //     lng: points[(points.length - 1)].lng
-    //   }
-    // });
+    var dest = new Hellberg.TripLocation({
+      name: destination_name,
+      coordinate: {
+        lat: points.length ? points[(points.length - 1)].lat : 0.0,
+        lng: points.length ? points[(points.length - 1)].lng : 0.0
+      }
+    });
 
 
     var answer = new Hellberg.Answer({
       answers: [
-        departure_name
+        dest.name
       ]
     });
 
@@ -73,7 +63,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
     var wikidfd = $q.defer();
 
     // var wikipedia_questions = [];
-    get_wikipedia_page(departure_name).then(function(response) {
+    get_wikipedia_page(dest.name).then(function(response) {
       var data = response.data;
 
       for (pid in data.query.pages) {
@@ -83,17 +73,20 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
         var content = revision['*'];
         content = txtwiki.parseWikitext(content);
 
+        // refractor into library - ugly-regex.js :D LOL
+
         content = content.replace(/^[  \s]*\|.*$/gi, '');         // Remove all lines beginning with |
         content = content.replace(/[\s\n]+/gi, ' ');              // Remove all whitespave
         content = content.replace(/\{\{[^\}]*\}\}/gi, '');      // Remove all {{ tags }}
-        content = content.replace(/\([^A-Za-z0-9]*\)/gi, '');     // Remove junk parahteses, such as ( ; )
+        content = content.replace(/\([^\)]*[;][^\)]*\)/gi, '');     // Remove junk parahteses, such as ( ; )
         content = content.replace(/([=]+[^=]+[=]+)/gi, '');     // Remove === Headings ===
 
         content = content.replace(/[\s\n]+/gi, ' ');                                    // Remove all whitespave
         content = $('<div />').html(content).text();                                    // Remove all HTML entities
 
         content = content.replace(/%/gi, '%%');                                   // Escape any % char
-        content = content.replace(new RegExp(departure_name, 'gi'), '%s');       // Replace all instances of city name with %s
+        content = content.replace(new RegExp(dest.name, 'gi'), '%s');       // Replace all instances of city name with %s
+        content = content.replace(/\s+,\s+/gi, ', ');                       // Fix commas
 
         var boundary = "#####";
 
@@ -124,8 +117,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
     var fsqdfd = $q.defer();
 
-    var foursquare_locations = [];
-    get_foursquare_venues({lat: 55.5833, lng: 13.0333}).then(function(response) {
+    get_foursquare_venues(dest.coordinate).then(function(response) {
 
       var venues = response.data.response.groups[0].items;
 
@@ -135,10 +127,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
         var name = venue_data.venue.name;
         var category = venue_data.venue.categories[0].shortName;
 
-        foursquare_locations.push({
-          name: name,
-          category: category
-        });
+        console.log("Name:", venue_data.venue.name);
 
         var template = new Hellberg.VenueQuestionTemplate({
           name: name,
@@ -151,6 +140,10 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
         });
 
         questions.push(question);
+
+        if (answer.validate_answer(name) !== true) {
+          console.log("OK!")
+        }
       }
 
       fsqdfd.resolve(questions);
@@ -160,12 +153,15 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
     $q.all([wikidfd.promise, fsqdfd.promise]).then(function(res) {
       var question_set = new Hellberg.QuestionSet();
-      var questions = res[0];
 
-      for (var idx = 0; idx < 5; idx++) {
-        var q = questions[idx];
-        question_set.add(q);
-      }
+      var wikipedia_questions = res[0];
+      var foursquare_questions = res[1];
+
+      question_set.add(wikipedia_questions[0]);
+      question_set.add(wikipedia_questions[1]);
+      question_set.add(foursquare_questions[0]);
+      question_set.add(wikipedia_questions[2]);
+      question_set.add(wikipedia_questions[3]);
 
       dfd.resolve(question_set);
     });

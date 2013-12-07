@@ -48,7 +48,7 @@ angular.module('hellbergApp')
 
           $scope.submit = function() {
             var answer = $scope.answer;
-            var question = questions.getQuestion(question_idx);
+            var question = questions.get_question(question_idx);
             var correct = question.validate_answer(answer);
             if (correct) {
               $location.path("/correct/" + $scope.current_score + "/" + answer + "/")
@@ -94,7 +94,7 @@ angular.module('hellbergApp')
             if (trip_time >= next_question_time) {
               next_question_time += TIME*1000/NUMBER_OF_QUESTIONS;
               $scope.current_score -= 2;
-              var text = questions.getQuestion(question_idx--).question;
+              var text = questions.get_question(question_idx--).question;
               $scope.question = text;
               // Speak.speak(text);
             }
@@ -103,7 +103,7 @@ angular.module('hellbergApp')
             if (!paused && $scope.current_ >= 0) {
               $timeout(loop, td, true);
             } else {
-              var answer = questions.getQuestion(0).answers[0];
+              var answer = questions.get_question(0).answers[0];
               $location.path("/result/0/" + answer + "/")
             }
           };

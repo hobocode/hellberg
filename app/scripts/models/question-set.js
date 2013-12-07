@@ -24,11 +24,11 @@ QuestionSet.prototype.questions = function() {
   return this.questions;
 };
 
-QuestionSet.prototype.getQuestion = function(idx) {
+QuestionSet.prototype.get_question = function(idx) {
   return this.questions[idx];
 };
 
-QuestionSet.prototype.setQuestion = function(question, idx) {
+QuestionSet.prototype.set_question = function(question, idx) {
   question.index = idx;
   return this.questions[idx] = question;
 };
@@ -40,7 +40,7 @@ QuestionSet.prototype.add = function(question) {
     // return this.questions.push(question);
   }
 
-  return this.setQuestion(question, question.index);
+  return this.set_question(question, question.index);
 };
 
 

@@ -25,7 +25,7 @@ Answer.prototype.threshold_value = function() {
   return this.threshold;
 };
 
-Answer.prototype.answers = function() {
+Answer.prototype.get_answers = function() {
   return this.answers;
 };
 
@@ -38,8 +38,7 @@ Answer.prototype.evaluate_answer = function(user_answer) {
   var answer_results = [];
   user_answer = user_answer.toLowerCase();
 
-  var l, answer;
-
+  var answer;
   for (var i = 0; i < this.answers.length; i++) {
     answer = this.answers[i];
     answer_results.push( new Levenshtein(answer.toLowerCase(), user_answer) );
@@ -72,7 +71,6 @@ Answer.prototype.answer_score = function(answer) {
 };
 
 Answer.prototype.validate_answer = function(answer) {
-
   var answer_score = this.answer_score(answer);
 
   return answer_score < this.score_threshold();
