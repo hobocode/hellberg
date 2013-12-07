@@ -52,6 +52,7 @@ body {
 .question {
   margin-top: 20px;
   font-size: 32px;
+  max-height: 200px;
   line-height: 42px;
 }
 
