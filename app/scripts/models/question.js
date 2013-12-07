@@ -22,9 +22,9 @@ var Question = function(options) {
   }
 };
 
-Question.prototype.score = function() {
-  return (this.index + 1) * 2;
-};
+// Question.prototype.score = function() {
+//   return (this.index + 1) * 2;
+// };
 
 Question.prototype.validate_answer = function(answer) {
   return this.answer.validate_answer(answer);
