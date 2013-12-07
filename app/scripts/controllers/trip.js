@@ -21,7 +21,7 @@ angular.module('hellbergApp')
     $scope.question = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempor orci porttitor enim ultricies semper. Nulla turpis nibh, eleifend et sapien sit amet, ullamcorper molestie nulla.";
 
     var dfd = RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
-      Questions.load(res[0], res[1], []);
+      Questions.fetch(res[0], res[1], []);
     });
 
 
