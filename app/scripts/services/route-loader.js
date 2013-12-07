@@ -49,8 +49,8 @@ angular.module('hellbergApp').factory('RouteLoader', ['$q', function($q) {
     fetch_details(dep_ref, dest_ref).then(function(res) {
       var name1 = res[0].name;
       var name2 = res[1].name;
-      fetch_route(name1, name2).then(function(res) {
-        dfd.resolve([name1, name2, res]);
+      fetch_route(name1, name2).then(function(route) {
+        dfd.resolve([res[0], res[1], route]);
       });
     });
 

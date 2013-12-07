@@ -12,7 +12,14 @@ angular.module('hellbergApp')
     }
 
     RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
-      Questions.fetch(res[0], res[1], []).then(function(questions) {
+      console.log(res);
+      Questions.fetch(res[0].name, res[1].name, [{
+        lng : res[0].geometry.location.lng(),
+        lat : res[0].geometry.location.lat()
+      }, {
+        lng : res[1].geometry.location.lng(),
+        lat : res[1].geometry.location.lat()
+      }]).then(function(questions) {
 
         var hyperlapse;
         var NUMBER_OF_QUESTIONS = 5;
