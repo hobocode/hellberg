@@ -60,6 +60,19 @@ body {
   margin-left: 20px;
 }
 
+.brake {
+  position: relative;
+  top: -100px;
+  transition-property: top;
+  transition-duration: 0.5s;
+  -webkit-transition-property: top;
+  -webkit-transition-duration: 0.2s;
+}
+
+.pull {
+  top: 20px;
+}
+
 .input-xxxlg {
   height: 80px;
   padding: 10px 16px;

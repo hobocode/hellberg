@@ -82,6 +82,10 @@ angular.module('hellbergApp')
             } else {
               pause();
             }
+            $(".brake").addClass("pull");
+            $timeout(function() {
+              $(".brake").removeClass("pull");
+            }, 100);
           }
 
           var td = 50;
