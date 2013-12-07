@@ -17,7 +17,7 @@ angular.module('hellbergApp')
       }]).then(function(questions) {
         var hyperlapse;
         var NUMBER_OF_QUESTIONS = 5;
-        var NPTS = 10; // number of points
+        var NPTS = 200; // number of points
         var TIME = 50; // total time in seconds
         var TIME_PER_QUESTION = TIME/NUMBER_OF_QUESTIONS;
 
