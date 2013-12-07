@@ -1,11 +1,16 @@
 /*
  * Wikipedia
  * =========
- * Vårt resmål ligger i ett land med %d innevånare  (wikipedia)
+ * Vårt resmål ligger i ett land med %d innevånare
  * Sök/ersätt {location.name} med "Vårt resmål" i random mening
+ *
+ * Vi reser mot en stad som grundades av {name} {year}
+ * Vår resa tar sin början i en stad som …
+ * Vi närmar oss nu vårt resmål, en stad som …
  *
  * Foursquare
  * ==========
+ * {venue} is popular {category} at our detination
  *
  */
 

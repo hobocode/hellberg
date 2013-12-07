@@ -60,6 +60,35 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', function(
     instance.destination_name = destination_name;
     instance.points = points;
 
+    // if (points.length < 1) {
+    //   return false;
+    // }
+
+    // var dep = new Hellberg.TripLocation({
+    //   name: departure_name,
+    //   coordinate: {
+    //     lat: points[0].lat,
+    //     lng: points[0].lng
+    //   }
+    // });
+
+    // var dest = new Hellberg.TripLocation({
+    //   name: destination_name,
+    //   coordinate: {
+    //     lat: points[(points.length - 1)].lat,
+    //     lng: points[(points.length - 1)].lng
+    //   }
+    // });
+
+
+    var answer = new Hellberg.Answer({
+      answers: [
+        departure_name
+      ]
+    });
+
+    var questions = new Hellberg.QuestionSet();
+
     // get_wikipedia_page(departure_name, function(data) {
 
     //   var get_wikipedia_page_content = function(response) {
@@ -103,38 +132,22 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', function(
           category: category
         });
 
-        var t = Hellberg.VenueQuestionTemplate({
+        var template = new Hellberg.VenueQuestionTemplate({
           name: name,
           category: category
         });
 
-        // console.log(t);
+        var question = new Hellberg.Question({
+          question: template.question(),
+          answer: answer
+        });
+
+        questions.add(question);
+        console.log(question);
       }
     });
 
-    if (points.length < 1) {
-      return false;
-    }
-
-    var dep = new Hellberg.TripLocation({
-      name: departure_name,
-      coordinate: {
-        lat: points[0].lat,
-        lng: points[0].lng
-      }
-    });
-
-    var dest = new Hellberg.TripLocation({
-      name: destination_name,
-      coordinate: {
-        lat: points[(points.length - 1)].lat,
-        lng: points[(points.length - 1)].lng
-      }
-    });
-
-
-
-    return "question";
+    return questions;
   };
 
   return instance;
