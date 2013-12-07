@@ -8,7 +8,7 @@ var load_img = function($q, src) {
     dfd.resolve();
   };
 
-  img.src = "http://maps.googleapis.com/maps/api/streetview?" + src;
+  img.src = src;
 
   return dfd.promise;
 };
@@ -93,10 +93,9 @@ angular.module('hellbergApp')
             var lat = point.lat();
             var lng = point.lng();
             var imgurl = "size=600x300&location=" + lat + "," + lng + "&heading=" + heading + "&pitch=-0.76&sensor=false";
-            imgurls.push(imgurl);
+            var url = "http://maps.googleapis.com/maps/api/streetview?" + imgurl;
+            imgurls.push(url);
           }
-
-          console.log(imgurls)
 
           var imgdfds = [];
           for (var imgidx in imgurls) {
@@ -108,7 +107,7 @@ angular.module('hellbergApp')
             var idx = 0;
             var stop;
             var func = function() {
-              $scope.img_url = imgurls[idx];
+              $scope.img_url =  imgurls[idx];
               idx++;
               if (idx < imgurls.length) {
                 stop = $timeout(func, 100);
