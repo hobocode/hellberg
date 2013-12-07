@@ -127,22 +127,18 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
         var name = venue_data.venue.name;
         var category = venue_data.venue.categories[0].shortName;
 
-        console.log("Name:", venue_data.venue.name);
-
-        var template = new Hellberg.VenueQuestionTemplate({
-          name: name,
-          category: category
-        });
-
-        var question = new Hellberg.Question({
-          question: template.question(),
-          answer: answer
-        });
-
-        questions.push(question);
-
         if (answer.validate_answer(name) !== true) {
-          console.log("OK!")
+          var template = new Hellberg.VenueQuestionTemplate({
+            name: name,
+            category: category
+          });
+
+          var question = new Hellberg.Question({
+            question: template.question(),
+            answer: answer
+          });
+
+          questions.push(question);
         }
       }
 
