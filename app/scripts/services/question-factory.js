@@ -66,6 +66,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
     // var wikipedia_questions = [];
     get_wikipedia_page(dest.name).then(function(response) {
       var data = response.data;
+      var sentence_min_length = 25;
 
       for (pid in data.query.pages) {
         var page = data.query.pages[pid];
@@ -97,7 +98,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
         for (var idx = 0; idx < sentences.length; idx++) {
           var sentence = sentences[idx];
-          if (sentence.match(/%s/gi)) {
+          if (sentence.match(/%s/gi) && sentence.length > sentence_min_length) {
 
             var template = new Hellberg.FactQuestionTemplate({
               format: sentence.replace(/^\s+/gi, ''),

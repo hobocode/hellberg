@@ -91,7 +91,7 @@ angular.module('hellbergApp')
             if (trip_time >= next_question_time) {
               next_question_time += TIME*1000/NUMBER_OF_QUESTIONS;
               $scope.current_score -= 2;
-              var text = questions.get_question(question_idx--).question;
+              var text = questions.questions[question_idx--].question;
               $scope.question = text;
               // Speak.speak(text);
             }

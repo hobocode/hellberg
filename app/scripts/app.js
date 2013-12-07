@@ -18,6 +18,24 @@ angular.module('hellbergApp', [
       end: (60.0 * 4 + 8.0)     // Not in use at the moment
     }
   })
+
+  .directive('focusMe', function($timeout) {
+    return {
+      scope: { trigger: '=focusMe' },
+      link: function(scope, element) {
+        scope.$watch('trigger', function(value) {
+          if(value === true) {
+            //console.log('trigger',value);
+            //$timeout(function() {
+              element[0].focus();
+              scope.trigger = false;
+            //});
+          }
+        });
+      }
+    };
+  })
+
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
