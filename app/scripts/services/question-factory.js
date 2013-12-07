@@ -74,49 +74,115 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
         var content = revision['*'];
 
-        console.log(content); // #redirect [[Vienna]] <= Detta villv iha
+        var lcontent = content.toLowerCase();
+        var idx = lcontent.indexOf('#redirect [[');
 
-        content = txtwiki.parseWikitext(content);
-        // refractor into library - ugly-regex.js :D LOL
+        if (idx == 0) {
+          content = content.substr(idx+"#redirect [[".length);
+          idx = content.indexOf("]]");
+          var destname = content.substr(0, idx);
+          console.log("DESTNAME", destname);
+          get_wikipedia_page(destname).then(function(response) {
+            dest.name = destname;
+            var data = response.data;
+            var sentence_min_length = 25;
 
-        content = content.replace(/^[  \s]*\|.*$/gi, '');         // Remove all lines beginning with |
-        content = content.replace(/[\s\n]+/gi, ' ');              // Remove all whitespave
-        content = content.replace(/\{\{[^\}]*\}\}/gi, '');      // Remove all {{ tags }}
-        content = content.replace(/\([^\)]*[;][^\)]*\)/gi, '');     // Remove junk parahteses, such as ( ; )
-        content = content.replace(/([=]+[^=]+[=]+)/gi, '');     // Remove === Headings ===
+            for (pid in data.query.pages) {
+              var page = data.query.pages[pid];
+              var revision = page.revisions.pop();
 
-        content = content.replace(/[\s\n]+/gi, ' ');                                    // Remove all whitespave
-        content = $('<div />').html(content).text();                                    // Remove all HTML entities
+              var content = revision['*'];
 
-        content = content.replace(/%/gi, '%%');                                   // Escape any % char
-        content = content.replace(new RegExp(dest.name, 'gi'), '%s');       // Replace all instances of city name with %s
-        content = content.replace(/\s+,\s+/gi, ', ');                       // Fix commas
+              content = txtwiki.parseWikitext(content);
+              // refractor into library - ugly-regex.js :D LOL
 
-        var boundary = "#####";
+              content = content.replace(/^[  \s]*\|.*$/gi, '');         // Remove all lines beginning with |
+              content = content.replace(/[\s\n]+/gi, ' ');              // Remove all whitespave
+              content = content.replace(/\{\{[^\}]*\}\}/gi, '');      // Remove all {{ tags }}
+              content = content.replace(/\([^\)]*[;][^\)]*\)/gi, '');     // Remove junk parahteses, such as ( ; )
+              content = content.replace(/([=]+[^=]+[=]+)/gi, '');     // Remove === Headings ===
 
-        content = content.replace(/([\.\?!])\s+/gi, '$1' + boundary);
-        var sentences = content.split(boundary);
-        var questions = [];
+              content = content.replace(/[\s\n]+/gi, ' ');                                    // Remove all whitespave
+              content = $('<div />').html(content).text();                                    // Remove all HTML entities
 
-        for (var idx = 0; idx < sentences.length; idx++) {
-          var sentence = sentences[idx];
-          if (sentence.match(/%s/gi) && sentence.length > sentence_min_length) {
+              content = content.replace(/%/gi, '%%');                                   // Escape any % char
+              content = content.replace(new RegExp(dest.name, 'gi'), '%s');       // Replace all instances of city name with %s
+              content = content.replace(/\s+,\s+/gi, ', ');                       // Fix commas
 
-            var template = new Hellberg.FactQuestionTemplate({
-              format: sentence.replace(/^\s+/gi, ''),
-              location: dest
-            });
+              var boundary = "#####";
 
-            var question = new Hellberg.Question({
-              question: template.question(),
-              answer: answer
-            });
+              content = content.replace(/([\.\?!])\s+/gi, '$1' + boundary);
+              var sentences = content.split(boundary);
+              var questions = [];
 
-            questions.push(question);
+              for (var idx = 0; idx < sentences.length; idx++) {
+                var sentence = sentences[idx];
+                if (sentence.match(/%s/gi) && sentence.length > sentence_min_length) {
+
+                  var template = new Hellberg.FactQuestionTemplate({
+                    format: sentence.replace(/^\s+/gi, ''),
+                    location: dest
+                  });
+
+                  var question = new Hellberg.Question({
+                    question: template.question(),
+                    answer: answer
+                  });
+
+                  questions.push(question);
+                }
+              }
+
+              wikidfd.resolve(questions);
+            }
+          });
+
+        } else {
+
+          console.log(content); // #redirect [[Vienna]] <= Detta villv iha
+
+          content = txtwiki.parseWikitext(content);
+          // refractor into library - ugly-regex.js :D LOL
+
+          content = content.replace(/^[  \s]*\|.*$/gi, '');         // Remove all lines beginning with |
+          content = content.replace(/[\s\n]+/gi, ' ');              // Remove all whitespave
+          content = content.replace(/\{\{[^\}]*\}\}/gi, '');      // Remove all {{ tags }}
+          content = content.replace(/\([^\)]*[;][^\)]*\)/gi, '');     // Remove junk parahteses, such as ( ; )
+          content = content.replace(/([=]+[^=]+[=]+)/gi, '');     // Remove === Headings ===
+
+          content = content.replace(/[\s\n]+/gi, ' ');                                    // Remove all whitespave
+          content = $('<div />').html(content).text();                                    // Remove all HTML entities
+
+          content = content.replace(/%/gi, '%%');                                   // Escape any % char
+          content = content.replace(new RegExp(dest.name, 'gi'), '%s');       // Replace all instances of city name with %s
+          content = content.replace(/\s+,\s+/gi, ', ');                       // Fix commas
+
+          var boundary = "#####";
+
+          content = content.replace(/([\.\?!])\s+/gi, '$1' + boundary);
+          var sentences = content.split(boundary);
+          var questions = [];
+
+          for (var idx = 0; idx < sentences.length; idx++) {
+            var sentence = sentences[idx];
+            if (sentence.match(/%s/gi) && sentence.length > sentence_min_length) {
+
+              var template = new Hellberg.FactQuestionTemplate({
+                format: sentence.replace(/^\s+/gi, ''),
+                location: dest
+              });
+
+              var question = new Hellberg.Question({
+                question: template.question(),
+                answer: answer
+              });
+
+              questions.push(question);
+            }
           }
-        }
 
-        wikidfd.resolve(questions);
+          wikidfd.resolve(questions);
+        }
       }
     });
 
