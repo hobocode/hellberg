@@ -36,6 +36,11 @@ Question.prototype.validate_answer = function(answer) {
 
 
 var ImageQuestion = function(options) {
+
+  if (typeof options === 'undefined' || options === null) {
+    options = {};
+  }
+
   Question.call(this, options);
 
   var defaults = {
