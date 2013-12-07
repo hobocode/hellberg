@@ -40,10 +40,30 @@ body {
 
 #pano { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index:-1; }
 
-.result {
+.result .jumbotron {
   margin: 0;
+  border: 1px solid #aaa;
 }
 
 .result h1 {
   margin: 0;
 }
+
+.question {
+  margin-top: 20px;
+  font-size: 32px;
+  line-height: 42px;
+}
+
+.trip-logo {
+  margin-left: 20px;
+}
+
+.input-xxxlg {
+  height: 80px;
+  padding: 10px 16px;
+  font-size: 60px;
+  line-height: 1.33;
+  border-radius: 6px;
+}
+
