@@ -47,7 +47,7 @@ angular.module('hellbergApp')
             var question = questions.get_question(question_idx);
             var correct = question.validate_answer(answer);
             if (correct) {
-              $location.path("/result/" + $scope.current_score + "/" + answer + "/")
+              $location.path("/result/" + $scope.current_score + "/" + question.answer.answers[0] + "/")
             } else {
               $scope.show_wrong = true;
               $scope.show_input = false;
