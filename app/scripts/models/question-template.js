@@ -15,6 +15,9 @@
  */
 
 
+ String.prototype.capitalize = function() {
+     return this.charAt(0).toUpperCase() + this.slice(1);
+ }
 
 var QuestionTemplate = function(options) {
   if (typeof options === 'undefined' || options === null) {
@@ -115,9 +118,46 @@ VenueQuestionTemplate.prototype.question = function() {
 };
 
 
+
+
+var FactQuestionTemplate = function(options) {
+
+  if (typeof options === 'undefined' || options === null) {
+    options = {};
+  }
+
+  QuestionTemplate.call(this, options);
+
+  var defaults = {
+    format: '%s'
+  };
+
+  for (var key in defaults) {
+    var value = null;
+    if (key in options) {
+      value = options[key];
+    } else {
+      value = defaults[key];
+    }
+
+    this[key] = value;
+  }
+};
+
+FactQuestionTemplate.prototype = new QuestionTemplate();
+FactQuestionTemplate.prototype.constructor = QuestionTemplate;
+
+FactQuestionTemplate.prototype.question = function() {
+  var q = sprintf(this.format, this.destination_synonym());
+  return q.capitalize();
+};
+
+
+
 var Hellberg = window.Hellberg || {};
 Hellberg.QuestionTemplate = QuestionTemplate;
 Hellberg.VenueQuestionTemplate = VenueQuestionTemplate;
+Hellberg.FactQuestionTemplate = FactQuestionTemplate;
 window.Hellberg = Hellberg;
 
 

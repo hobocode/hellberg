@@ -7,6 +7,10 @@ angular.module('hellbergApp', [
   'ngRoute',
   'ngAutocomplete'
 ])
+  .constant("LOCALE", {
+    lang: 'en',
+    locale: 'en_US'
+  })
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

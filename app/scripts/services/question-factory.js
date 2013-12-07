@@ -1,5 +1,5 @@
 
-var app = angular.module('hellbergApp').factory('Questions', ['$http', function($http) {
+var app = angular.module('hellbergApp').factory('Questions', ['$http', 'LOCALE', function($http, LOCALE) {
   var instance = {
     departure_name: null,
     destination_name: null,
@@ -7,9 +7,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', function(
   }
 
   var FOURSQUARE_API_ACCESS_TOKEN = "SL5IPGO1JG5XW1NU0QT1BQY1ESDO1HI13HXSS5EBRKFP1DXS";
-
   var FOURSQUARE_API_CLIENT_ID = "MURHMAGAPKW5ZAXYEEPFC30BALAU0D4CZYLRRWOMEKIDLV2C";
-
   var FOURSQUARE_API_CLIENT_SECRET = "TI0FW2KG2NPVFP20TSMIBSYALQJ4XM0I2WFMBXB3JTXPJMHU";
 
   var get_question = function(idx) {
@@ -18,14 +16,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', function(
 
   var get_wikipedia_page = function(search_term, callback) {
 
-    // include param callback=cb_funtionc_name
-
-    // http://sv.wikipedia.org/w/api.php?format=json&action=query&titles=Malmö&prop=info
-    // http://sv.wikipedia.org/w/api.php?format=json&action=query&titles=Malmö&prop=revisions&rvprop=content
-    //
-    // http://sv.wikipedia.org/w/api.php?action=query&format=json&callback=test&prop=revisions&rvprop=content&titles=Malmö
-
-    var url = "http://sv.wikipedia.org/w/api.php?action=query&format=json&callback=JSON_CALLBACK&prop=revisions&rvprop=content&titles=" + encodeURIComponent(search_term);
+    var url = "http://" + LOCALE.lang + ".wikipedia.org/w/api.php?action=query&format=json&callback=JSON_CALLBACK&prop=revisions&rvprop=content&titles=" + encodeURIComponent(search_term);
     load_url(url, callback);
   };
 
@@ -87,33 +78,51 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', function(
       ]
     });
 
-    var questions = new Hellberg.QuestionSet();
+    var questions = [];
 
-    // get_wikipedia_page(departure_name, function(data) {
+    var wikipedia_questions = [];
+    get_wikipedia_page(departure_name, function(data) {
 
-    //   var get_wikipedia_page_content = function(response) {
-    //     for (pid in response.query.pages) {
-    //       var page = response.query.pages[pid];
-    //       var revision = page.revisions.pop();
+      var get_wikipedia_page_content = function(response) {
+        for (pid in response.query.pages) {
+          var page = response.query.pages[pid];
+          var revision = page.revisions.pop();
 
-    //       var content = revision['*'];
-    //       var content = txtwiki.parseWikitext(content);
+          var content = revision['*'];
+          content = txtwiki.parseWikitext(content);
 
-    //       content = content.replace(/>/g, "&gt;");
-    //       content = content.replace(/</g, "&lt;");
-    //       content = content.replace(/\n/g, "<br>");
+          content = content.replace(/^[  \s]*\|.*$/gi, '');         // Remove all lines beginning with |
+          content = content.replace(/[\s\n]+/gi, ' ');              // Remove all whitespave
+          content = content.replace(/\{\{[^\}]*\}\}/gi, '');      // Remove all {{ tags }}
+          content = content.replace(/\([^A-Za-z0-9]*\)/gi, '');     // Remove junk parahteses, such as ( ; )
+          content = content.replace(/([=]+[^=]+[=]+)/gi, '');     // Remove === Headings ===
 
-    //       // content = content.replace(/^[  \s]*|.*$/gi, '');        // Remove all lines beginning with |
-    //       content = content.replace(/[\s\n]+/gi, ' ');              // Remove all whitespave
-    //       content = content.replace(/\{\{[^\}]*\}\}/gi, '');      // Remove all {{ tags }}
+          content = content.replace(/[\s\n]+/gi, ' ');                                    // Remove all whitespave
+          content = content.replace(new RegExp(departure_name, 'gi'), '%s');       // Replace all instances of city name with %s
 
-    //       return content;
-    //     }
-    //   };
+          var boundary = "#####";
 
-    //   var content = get_wikipedia_page_content(data);
-    //   console.log(content);
-    // });
+          content = content.replace(/([\.\?!])\s+/gi, '$1' + boundary);
+          var sentences = content.split(boundary);
+          var questions = [];
+
+          for (var idx in sentences) {
+
+            var sentence = sentences[idx];
+            if (sentence.match, '%s') {
+              var question = new FactQuestionTemplate({
+                format: sentence.replace(/^\s+/gi, '')
+              });
+              questions.push(question);
+            }
+          }
+
+          return questions;
+        }
+      };
+
+      questions.push.apply(get_wikipedia_page_content(data));
+    });
 
 
     var foursquare_locations = [];
@@ -142,12 +151,17 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', function(
           answer: answer
         });
 
-        questions.add(question);
-        console.log(question);
+        questions.push(question);
       }
     });
 
-    return questions;
+    var question_set = new Hellberg.QuestionSet();
+
+    for (var idx = 0; idx < 5; idx++) {
+      question_set.add(questions[idx]);
+    }
+
+    return question_set;
   };
 
   return instance;
