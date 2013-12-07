@@ -20,8 +20,8 @@ angular.module('hellbergApp')
 
     $scope.question = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempor orci porttitor enim ultricies semper. Nulla turpis nibh, eleifend et sapien sit amet, ullamcorper molestie nulla.";
 
-    var dfd = RouteLoader.load($routeParams.dep_ref, $routeParams.dest_ref).then(function() {
-      console.log("hej");
+    var dfd = RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
+      Questions.load(res[0], res[1], []);
     });
 
 
