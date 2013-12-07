@@ -103,7 +103,7 @@ var VenueQuestionTemplate = function(options) {
   QuestionTemplate.call(this, options);
 
   var defaults = {
-    format: '%s is a popular %s at %s',
+    format: '%s is a popular %s at %s.',
     name: null,
     category: null
   };
