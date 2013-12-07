@@ -52,11 +52,25 @@ body {
 .question {
   margin-top: 20px;
   font-size: 32px;
+  max-height: 200px;
   line-height: 42px;
 }
 
 .trip-logo {
   margin-left: 20px;
+}
+
+.brake {
+  position: relative;
+  top: -100px;
+  transition-property: top;
+  transition-duration: 0.5s;
+  -webkit-transition-property: top;
+  -webkit-transition-duration: 0.2s;
+}
+
+.pull {
+  top: 20px;
 }
 
 .input-xxxlg {

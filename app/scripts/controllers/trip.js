@@ -82,27 +82,36 @@ angular.module('hellbergApp')
             } else {
               pause();
             }
+            $(".brake").addClass("pull");
+            $timeout(function() {
+              $(".brake").removeClass("pull");
+            }, 100);
           }
 
           var td = 50;
           loop = function() {
             $scope.trip_progress = (trip_time/1000)/TIME*td*2;
 
+            trip_time += td;
+
             if (trip_time >= next_question_time) {
               next_question_time += TIME*1000/NUMBER_OF_QUESTIONS;
               $scope.current_score -= 2;
-              var text = questions.questions[question_idx--].question;
-              $scope.question = text;
-              // Speak.speak(text);
+
+              if ($scope.current_score <= 0) {
+                var answer = questions.questions[0].answer.answers[0];
+                $location.path("/result/0/" + answer + "/")
+              } else {
+                var text = questions.get_question(question_idx--).question;
+                $scope.question = text;
+                // Speak.speak(text);
+              }
             }
 
-            trip_time += td;
             if (!paused && $scope.current_score > 0) {
               $timeout(loop, td, true);
-            } else if ($scope.current_score <= 0) {
-              var answer = questions.get_question(0).answers[0];
-              $location.path("/result/0/" + answer + "/")
             }
+
           };
           loop();
         }
