@@ -68,6 +68,16 @@ QuestionTemplate.prototype.destination_synonym = function(idx) {
   return this._random_array_idx(this.destination_synonyms, idx);
 };
 
+QuestionTemplate.prototype.location_synonym = function(idx) {
+
+  if (this.location.type == Hellberg.TripLocation.prototype.LOCATION_TYPE_DEPARTURE) {
+    return this._random_array_idx(this.departure_synonym, idx);
+  }
+
+  return this._random_array_idx(this.destination_synonyms, idx);
+};
+
+
 QuestionTemplate.prototype._random_array_idx = function(data, idx) {
   if (typeof data === 'undefined' || data === null) {
     data = [];
@@ -114,7 +124,7 @@ VenueQuestionTemplate.prototype = new QuestionTemplate();
 VenueQuestionTemplate.prototype.constructor = QuestionTemplate;
 
 VenueQuestionTemplate.prototype.question = function() {
-  return sprintf(this.format, this.name, this.category.toLowerCase(), this.departure_synonym().toLowerCase());
+  return sprintf(this.format, this.name, this.category.toLowerCase(), this.location_synonym().toLowerCase());
 };
 
 
@@ -164,7 +174,7 @@ FactQuestionTemplate.prototype.question = function() {
 
   var params = [
     this.format,
-    this.destination_synonym()
+    this.location_synonym()
   ];
 
   var fillers = this.template_fillers;

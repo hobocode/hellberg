@@ -9,7 +9,8 @@ var TripLocation = function(options) {
     coordinate: {
       lat: 0.0,
       lng: 0.0
-    }
+    },
+    type: TripLocation.prototype.LOCATION_TYPE_DESTINATION
   };
 
   for (var key in defaults) {
@@ -24,6 +25,10 @@ var TripLocation = function(options) {
   }
 };
 
+TripLocation.prototype.LOCATION_TYPE_DEPARTURE = 'departure';
+TripLocation.prototype.LOCATION_TYPE_DESTINATION = 'destination';
+
 var Hellberg = window.Hellberg || {};
 Hellberg.TripLocation = TripLocation;
 window.Hellberg = Hellberg;
+
