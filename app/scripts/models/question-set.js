@@ -34,11 +34,16 @@ QuestionSet.prototype.setQuestion = function(question, idx) {
 };
 
 QuestionSet.prototype.add = function(question) {
+
+  if (typeof question === 'undefined' || question === null) {
+    return false;
+  }
+
   if (question.index < 0) {
     question.index = this.questions.length;
   }
 
-  return this.questions.push(question);
+  return this.setQuestion(question, question.index);
 };
 
 
