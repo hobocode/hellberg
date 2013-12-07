@@ -28,6 +28,10 @@ angular.module('hellbergApp', [
         templateUrl: 'views/trip.html',
         controller: 'TripCtrl'
       })
+      .when('/result/:city/:points/', {
+        templateUrl: 'views/result.html',
+        controller: 'ResultCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

@@ -38,10 +38,10 @@ Answer.prototype.evaluate_answer = function(user_answer) {
   var answer_results = [];
   user_answer = user_answer.toLowerCase();
 
-  var idx, l, answer;
+  var l, answer;
 
-  for (idx in this.answers) {
-    answer = this.answers[idx];
+  for (var i = 0; i < this.answers.length; i++) {
+    answer = this.answers[i];
     answer_results.push( new Levenshtein(answer.toLowerCase(), user_answer) );
   }
 

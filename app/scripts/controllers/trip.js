@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('hellbergApp')
-  .controller('TripCtrl', ['$scope', '$routeParams', '$q', '$timeout', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack', function ($scope, $routeParams, $q, $timeout, RouteLoader, Questions, Speak, Soundtrack) {
+  .controller('TripCtrl', ['$scope', '$routeParams', '$q', '$timeout', '$location', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack', function ($scope, $routeParams, $q, $timeout, $location, RouteLoader, Questions, Speak, Soundtrack) {
 
     $scope.points = 10;
     $scope.loading = true;
@@ -11,7 +11,7 @@ angular.module('hellbergApp')
     }
 
     RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
-      console.log(res);
+
       Questions.fetch(res[0].name, res[1].name, [{
         lng : res[0].geometry.location.lng(),
         lat : res[0].geometry.location.lat()
@@ -19,7 +19,6 @@ angular.module('hellbergApp')
         lng : res[1].geometry.location.lng(),
         lat : res[1].geometry.location.lat()
       }]).then(function(questions) {
-
         var hyperlapse;
         var NUMBER_OF_QUESTIONS = 5;
         var NPTS = 10; // number of points
@@ -29,25 +28,52 @@ angular.module('hellbergApp')
         $scope.loader_progress = 0;
         $scope.loader_total = NPTS;
 
+
         var start = function() {
+          var play, pause, loop;
+
+          Soundtrack.play();
+
           $scope.$apply(function() {
             $scope.loading = false;
           });
 
-          Soundtrack.play();
-
           var trip_time = 0;
           var next_question_time = 0;
-          var paused = false, question_idx = 0;
+          var paused = false, question_idx = NUMBER_OF_QUESTIONS-1;
 
-          var pause = function() {
-            paused = true;
-            hyperlapse.pause();
+          $scope.show_input = false;
+          $scope.show_result = false;
+
+
+          $scope.submit = function() {
+            var answer = $scope.answer;
+            var question = questions.getQuestion(question_idx);
+            var correct = question.validate_answer(answer);
+            if (correct) {
+              $location.path("/correct/" + $scope.current_score + "/" + answer + "/")
+            } else {
+              $scope.show_wrong = true;
+              $scope.show_input = false;
+              $timeout(function() {
+                $scope.show_wrong = false;
+                play();
+              }, 3000);
+            }
           };
 
-          var play = function() {
+          pause = function() {
+            paused = true;
+            hyperlapse.pause();
+            $scope.show_input = true;
+          };
+
+          play = function() {
+            paused = false;
+            loop();
             hyperlapse.play();
-          }
+            $scope.show_input = false;
+          };
 
           $scope.current_score = 2*(NUMBER_OF_QUESTIONS+1);
           $scope.trip_progress = 0;
@@ -61,20 +87,24 @@ angular.module('hellbergApp')
             }
           }
 
-          var loop = function() {
-            $scope.trip_progress = (trip_time/1000)/TIME*100;
+          var td = 50;
+          loop = function() {
+            $scope.trip_progress = (trip_time/1000)/TIME*td;
 
             if (trip_time >= next_question_time) {
               next_question_time += TIME*1000/NUMBER_OF_QUESTIONS;
               $scope.current_score -= 2;
-              var text = questions.getQuestion(question_idx++).question;
+              var text = questions.getQuestion(question_idx--).question;
               $scope.question = text;
-              Speak.speak(text);
+              // Speak.speak(text);
             }
 
-            trip_time += 100;
-            if (!paused) {
-              $timeout(loop, 100, true);
+            trip_time += td;
+            if (!paused && $scope.current_ >= 0) {
+              $timeout(loop, td, true);
+            } else {
+              var answer = questions.getQuestion(0).answers[0];
+              $location.path("/result/0/" + answer + "/")
             }
           };
           loop();

@@ -6,32 +6,58 @@
 
 </div>
 
-<div class="container">
+<div class="container" ng-show="loading">
 
-  <div class="loader-progress" ng-show="loading">
+  <div class="loader-progress">
   {{ loader_progress }} / {{ loader_total }}
   </div>
 
 </div>
 
-<div id="pano" ng-show="!loading"></div>
+<div ng-show="!loading">
 
-<div id="attribution"></div>
+  <div id="pano"></div>
 
-<div class="trip-data"  ng-show="!loading">
-
-  <div class="progress">
-    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ trip_progress }}%">
-      <span class="sr-only">60% Complete</span>
+  <div class="container" ng-show="show_input">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <form ng-submit="submit()">
+          <input type="text" class="form-control input-lg" ng-model="answer" /></input>
+        </form>
+      </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-3 score">
-      {{ current_score }}
-    </div>
-    <div class="col-md-9 question">
-      {{ question }}
+  <div class="container" ng-show="show_wrong">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="jumbotron result">
+          <h1 class="text-center">Wrong!</h1>
+        </div>
+      </div>
     </div>
   </div>
+
+
+
+  <div id="attribution"></div>
+
+  <div class="trip-data" >
+
+    <div class="progress">
+      <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ trip_progress }}%">
+        <span class="sr-only">60% Complete</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3 score">
+        {{ current_score }}
+      </div>
+      <div class="col-md-9 question">
+        {{ question }}
+      </div>
+    </div>
+  </div>
+
 </div>

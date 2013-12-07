@@ -24,6 +24,7 @@ body {
 }
 
 .trip-data {
+  z-index: -1;
   padding: 20px;
   position: absolute;
   bottom: 0;
@@ -38,3 +39,11 @@ body {
 }
 
 #pano { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index:-1; }
+
+.result {
+  margin: 0;
+}
+
+.result h1 {
+  margin: 0;
+}

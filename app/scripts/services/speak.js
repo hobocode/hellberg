@@ -10,7 +10,6 @@ angular.module('hellbergApp').factory('Speak', ['LOCALE', function(LOCALE) {
     }
 
     var audioURL = ['http://www.corsproxy.com/', 'translate.google.com/translate_tts?ie=UTF-8&q=', text , '&tl=', encodeURIComponent(LOCALE.locale)].join('');
-    console.log(audioURL);
     var audio = new Audio();
 
     audio.addEventListener("play", function () {
