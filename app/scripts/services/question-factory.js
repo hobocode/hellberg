@@ -90,6 +90,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
         content = content.replace(/([=]+[^=]+[=]+)/gi, '');     // Remove === Headings ===
 
         content = content.replace(/[\s\n]+/gi, ' ');                                    // Remove all whitespave
+        content = $('<div />').html(content).text();                                    // Remove all HTML entities
 
         content = content.replace(/%/gi, '%%');                                   // Escape any % char
         content = content.replace(new RegExp(departure_name, 'gi'), '%s');       // Replace all instances of city name with %s

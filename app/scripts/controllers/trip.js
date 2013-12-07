@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('hellbergApp')
-  .controller('TripCtrl', ['$scope', '$routeParams', '$q', '$timeout', 'RouteLoader', 'Questions', 'Speak', function ($scope, $routeParams, $q, $timeout, RouteLoader, Questions, Speak) {
+  .controller('TripCtrl', ['$scope', '$routeParams', '$q', '$timeout', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack', function ($scope, $routeParams, $q, $timeout, RouteLoader, Questions, Speak, Soundtrack) {
 
     $scope.points = 10;
-
     $scope.loading = true;
 
     $scope.brake = function() {
@@ -34,6 +33,8 @@ angular.module('hellbergApp')
           $scope.$apply(function() {
             $scope.loading = false;
           });
+
+          Soundtrack.play();
 
           var trip_time = 0;
           var next_question_time = 0;

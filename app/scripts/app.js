@@ -7,9 +7,16 @@ angular.module('hellbergApp', [
   'ngRoute',
   'ngAutocomplete'
 ])
-  .constant("LOCALE", {
+  .constant('LOCALE', {
     lang: 'en',
-    locale: 'en_US'
+    locale: 'en_GB'
+  })
+  .constant('SOUNDTRACK', {
+    url: '/resources/kobenhavns-jernbane-damp-galop.m4a',
+    section: {
+      start: (60.0 * 1 + 15.0),
+      end: (60.0 * 4 + 8.0)     // Not in use at the moment
+    }
   })
   .config(function ($routeProvider) {
     $routeProvider
