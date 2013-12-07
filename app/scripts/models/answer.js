@@ -57,7 +57,7 @@ Answer.prototype.answer_score = function(answer) {
   }
 
   var idx;
-  for (idx in answer_results) {
+  for (idx = 0; idx < answer_results.length; idx++) {
     var l = answer_results[idx];
 
     var score = l.distance;
@@ -86,7 +86,7 @@ Answer.prototype.score_threshold = function(answer) {
   var total_length = 0;
 
   var idx;
-  for (idx in this.answers) {
+  for (idx = 0; idx < this.answers.length; idx++) {
     total_length += this.answers[idx].length;
   }
 
