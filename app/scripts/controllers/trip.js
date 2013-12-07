@@ -8,7 +8,7 @@ var load_img = function($q, src) {
     dfd.resolve();
   };
 
-  img.src = src;
+  img.src = "http://maps.googleapis.com/maps/api/streetview?" + src;
 
   return dfd.promise;
 };
@@ -34,6 +34,7 @@ angular.module('hellbergApp')
 
     $q.all([dfd1.promise, dfd2.promise]).then(function(res) {
 
+      console.log("RES", res);
       var questions = Questions.fetch(res[0].name, res[1].name, []);
 
       var directionsService = new google.maps.DirectionsService();
@@ -49,23 +50,53 @@ angular.module('hellbergApp')
 
         if (status == google.maps.DirectionsStatus.OK) {
           var route = result.routes[0];
-          var steps = route.legs[0].steps;
+
+          var leg = route.legs[0];
+          var totdist = leg.distance.value;
+
+          var NBR_IMGS = 1000;
+          var delta = totdist/NBR_IMGS;
+
+          var totd = 0;
+
+          var leg = route.legs[0];
+          var steps = leg.steps;
+
           for (var idx in steps) {
             var step = steps[idx];
-            console.log(step);
-            points.push(step.start_point);
-            points.push(step.end_point);
+            for (var jdx in step.path) {
+              var p = step.path[jdx];
+              points.push(p);
+            }
           }
+
+          // increase/reduces number of points
+          var newpoints;
+          var dists = [];
+          var headings = [];
+
+
+          for (var idx = 1; idx < points.length; idx++) {
+            var p0 = points[idx-1], p1 = points[idx];
+            dists.push(google.maps.geometry.spherical.computeDistanceBetween(p0, p1));
+            headings.push(google.maps.geometry.spherical.computeHeading(p0, p1));
+          }
+
+          console.log(dists);
+          console.log(headings);
 
           var imgurls = [];
 
-          for (var imgidx in points) {
-            var point = points[imgidx];
+          for (var idx = 0; idx < points.length-1; idx++) {
+            var heading = headings[idx];
+            var point = points[idx];
             var lat = point.lat();
             var lng = point.lng();
-            var imgurl = "http://maps.googleapis.com/maps/api/streetview?size=600x300&location=" + lat + "," + lng + "&heading=151.78&pitch=-0.76&sensor=false";
+            var imgurl = "size=600x300&location=" + lat + "," + lng + "&heading=" + heading + "&pitch=-0.76&sensor=false";
             imgurls.push(imgurl);
           }
+
+          console.log(imgurls)
 
           var imgdfds = [];
           for (var imgidx in imgurls) {
@@ -85,6 +116,7 @@ angular.module('hellbergApp')
             };
             stop = $timeout(func, 100);
           });
+
         } else {
           // [todo] - error
         }
