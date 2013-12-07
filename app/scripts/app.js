@@ -28,7 +28,7 @@ angular.module('hellbergApp', [
         templateUrl: 'views/trip.html',
         controller: 'TripCtrl'
       })
-      .when('/result/:points/:city/', {
+      .when('/result/:score/:answer/', {
         templateUrl: 'views/result.html',
         controller: 'ResultCtrl'
       })

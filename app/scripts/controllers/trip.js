@@ -6,10 +6,6 @@ angular.module('hellbergApp')
     $scope.points = 10;
     $scope.loading = true;
 
-    $scope.brake = function() {
-      console.log("BRAKE");
-    }
-
     RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
 
       Questions.fetch(res[0].name, res[1].name, [{
@@ -57,6 +53,7 @@ angular.module('hellbergApp')
               $scope.show_input = false;
               $timeout(function() {
                 $scope.show_wrong = false;
+                $scope.answer = "";
                 play();
               }, 3000);
             }
@@ -89,7 +86,7 @@ angular.module('hellbergApp')
 
           var td = 50;
           loop = function() {
-            $scope.trip_progress = (trip_time/1000)/TIME*td;
+            $scope.trip_progress = (trip_time/1000)/TIME*td*2;
 
             if (trip_time >= next_question_time) {
               next_question_time += TIME*1000/NUMBER_OF_QUESTIONS;

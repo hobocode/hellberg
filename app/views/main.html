@@ -3,25 +3,36 @@
 
   <div class="container dest-wrap">
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-4">
         <img src="/images/logo-vertical.png" class="img-responsive" />
       </div>
-      <div class="col-md-9">
+      <div class="col-md-8">
+
+        <h1>Where to go?</h1>
+
         <div class="form-group">
           <form role="form">
             <div class="form-group">
               <label for="exampleInputEmail1">Departure</label>
-              <input type="text" class="form-control" ng-autocomplete="name1" details="detail1" options="options" placeholder="Berlin" />
+              <input type="text" class="form-control input-lg" ng-autocomplete="name1" details="detail1" options="options" placeholder="Berlin" />
             </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Destination</label>
-              <input type="text" class="form-control" ng-autocomplete="name2" details="detail2" options="options" placeholder="Düsseldorf" />
+              <input type="text" class="form-control input-lg" ng-autocomplete="name2" details="detail2" options="options" placeholder="Düsseldorf" />
             </div>
-            <a class="btn btn-primary btn-large" ng-click="trip()">Go!</a>
+            <a class="btn btn-primary btn-lg" ng-click="trip()">Go!</a>
           </form>
+        </div>
+
+        <h1>Or random trip!</h1>
+
+        <a class="btn btn-primary btn-lg" ng-click="random()">Go!</a>
+
         </div>
       </div>
     </div>
   </div>
+
+  <a href="https://github.com/hobocode/hellberg"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
 
 </div>
