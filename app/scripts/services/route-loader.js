@@ -34,8 +34,7 @@ angular.module('hellbergApp').factory('RouteLoader', ['$q', function($q) {
       var points = [];
 
       if (status == google.maps.DirectionsStatus.OK) {
-        var route = result.routes[0];
-        dfd.resolve(route);
+        dfd.resolve(result);
       } else {
         // [todo] - error
       }

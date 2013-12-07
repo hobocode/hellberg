@@ -1,23 +1,37 @@
 
-<div class="coverbg" style="background-image: url({{ img_url }});">
+<div class="row">
 
-  <div class="col-md-3"><img src="/images/logo-horizontal.png" class="img-responsive" /></div>
+<div class="col-md-3"><img src="/images/logo-horizontal.png" class="img-responsive" /></div>
+<div class="col-md-2 col-md-offset-7"><a href="" ng-click="break()"><img src="/images/stop.svg" class="img-responsive" /></a></div>
 
+</div>
 
+<div class="container">
+
+  <div class="loader-progress" ng-show="loading">
+  {{ loader_progress }} / {{ loader_total }}
+  </div>
+
+</div>
+
+<div id="pano" ng-show="!loading"></div>
 
 <div id="attribution"></div>
 
-  <div class="question">
-    <div class="row">
-      <div class="col-md-3">
-        <div class="points">
-          {{ points }}
-        </div>
-      </div>
-      <div class="col-md-9">
-        {{ question }}
-      </div>
+<div class="trip-data"  ng-show="!loading">
+
+  <div class="progress">
+    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ trip_progress }}%">
+      <span class="sr-only">60% Complete</span>
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-md-3 score">
+      {{ current_score }}
+    </div>
+    <div class="col-md-9 question">
+      {{ question }}
+    </div>
+  </div>
 </div>

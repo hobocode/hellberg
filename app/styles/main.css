@@ -23,7 +23,7 @@ body {
   border-radius: 3px;
 }
 
-.question {
+.trip-data {
   padding: 20px;
   position: absolute;
   bottom: 0;
@@ -31,8 +31,10 @@ body {
   width: 100%;
 }
 
-.points {
+.score {
   text-align: center;
   font-size: 120px;
   font-weight: bold;
 }
+
+#pano { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index:-1; }
