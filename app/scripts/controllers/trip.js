@@ -51,7 +51,7 @@ angular.module('hellbergApp')
             var question = questions.get_question(question_idx);
             var correct = question.validate_answer(answer);
             if (correct) {
-              $location.path("/correct/" + $scope.current_score + "/" + answer + "/")
+              $location.path("/result/" + $scope.current_score + "/" + answer + "/")
             } else {
               $scope.show_wrong = true;
               $scope.show_input = false;
@@ -100,9 +100,9 @@ angular.module('hellbergApp')
             }
 
             trip_time += td;
-            if (!paused && $scope.current_ >= 0) {
+            if (!paused && $scope.current_score > 0) {
               $timeout(loop, td, true);
-            } else {
+            } else if ($scope.current_score <= 0) {
               var answer = questions.get_question(0).answers[0];
               $location.path("/result/0/" + answer + "/")
             }
