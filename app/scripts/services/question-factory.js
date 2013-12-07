@@ -40,7 +40,8 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
       coordinate: {
         lat: points.length ? points[0].lat : 0.0,
         lng: points.length ? points[0].lng : 0.0
-      }
+      },
+      type: Hellberg.TripLocation.prototype.LOCATION_TYPE_DEPARTURE
     });
 
     var dest = new Hellberg.TripLocation({
@@ -48,9 +49,9 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
       coordinate: {
         lat: points.length ? points[(points.length - 1)].lat : 0.0,
         lng: points.length ? points[(points.length - 1)].lng : 0.0
-      }
+      },
+      type: Hellberg.TripLocation.prototype.LOCATION_TYPE_DESTINATION
     });
-
 
     var answer = new Hellberg.Answer({
       answers: [
@@ -99,7 +100,8 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
           if (sentence.match, '%s') {
 
             var template = new Hellberg.FactQuestionTemplate({
-              format: sentence.replace(/^\s+/gi, '')
+              format: sentence.replace(/^\s+/gi, ''),
+              location: dest
             });
 
             var question = new Hellberg.Question({
@@ -130,7 +132,8 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
         if (answer.validate_answer(name) !== true) {
           var template = new Hellberg.VenueQuestionTemplate({
             name: name,
-            category: category
+            category: category,
+            location: dest
           });
 
           var question = new Hellberg.Question({
