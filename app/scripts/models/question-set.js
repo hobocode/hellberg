@@ -35,9 +35,11 @@ QuestionSet.prototype.set_question = function(question, idx) {
 
 QuestionSet.prototype.add = function(question) {
 
-  if (question.index < 0 || typeof question.index === 'undefined') {
+  console.log(question);
+
+  if (question.index < 0) {
     question.index = this.questions.length;
-    // return this.questions.push(question);
+    return this.questions.push(question);
   }
 
   return this.set_question(question, question.index);

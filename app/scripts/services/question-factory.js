@@ -97,7 +97,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
         for (var idx = 0; idx < sentences.length; idx++) {
           var sentence = sentences[idx];
-          if (sentence.match, '%s') {
+          if (sentence.match(/%s/gi)) {
 
             var template = new Hellberg.FactQuestionTemplate({
               format: sentence.replace(/^\s+/gi, ''),
@@ -156,11 +156,23 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
       var wikipedia_questions = res[0];
       var foursquare_questions = res[1];
 
-      question_set.add(wikipedia_questions[0]);
-      question_set.add(wikipedia_questions[1]);
-      question_set.add(foursquare_questions[0]);
-      question_set.add(wikipedia_questions[2]);
-      question_set.add(wikipedia_questions[3]);
+      var wiki_max_idx = wikipedia_questions.length - 1;
+      var fsq_max_idx = foursquare_questions.length - 1;
+
+      var last_question = parseInt(Math.round(Math.random()), 10);
+      var fsq_num_top_venues = 3;
+      var fsq_idx = parseInt(Math.round(Math.random() * ((fsq_max_idx < fsq_num_top_venues) ? fsq_max_idx : fsq_num_top_venues)), 10)
+
+      console.log(fsq_idx);
+
+      var first_question = parseInt(Math.round(Math.random()), 10);
+      var first_question_idx = 2 + parseInt(Math.round(Math.random() * 2), 10);
+
+      question_set.add(wikipedia_questions[last_question]);
+      question_set.add(wikipedia_questions[(1 - last_question)]);
+      question_set.add(foursquare_questions[fsq_idx]);
+      question_set.add(wikipedia_questions[first_question_idx + first_question]);
+      question_set.add(wikipedia_questions[first_question_idx + (1 - first_question)]);
 
       dfd.resolve(question_set);
     });
