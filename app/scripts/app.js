@@ -13,7 +13,7 @@ angular.module('hellbergApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/trip/:place1/:place2/', {
+      .when('/trip/:dep_ref/:dest_ref/', {
         templateUrl: 'views/trip.html',
         controller: 'TripCtrl'
       })
