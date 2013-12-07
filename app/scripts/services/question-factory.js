@@ -39,6 +39,8 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
   instance.fetch = function(departure_name, destination_name, points) {
 
+    console.log("POINTS:", points);
+
     // if (points.length < 1) {
     //   return false;
     // }
@@ -70,7 +72,7 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
     var wikidfd = $q.defer();
 
-    var wikipedia_questions = [];
+    // var wikipedia_questions = [];
     get_wikipedia_page(departure_name).then(function(response) {
       var data = response.data;
 
@@ -88,6 +90,8 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
         content = content.replace(/([=]+[^=]+[=]+)/gi, '');     // Remove === Headings ===
 
         content = content.replace(/[\s\n]+/gi, ' ');                                    // Remove all whitespave
+
+        content = content.replace(/%/gi, '%%');                                   // Escape any % char
         content = content.replace(new RegExp(departure_name, 'gi'), '%s');       // Replace all instances of city name with %s
 
         var boundary = "#####";
@@ -100,17 +104,21 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
           var sentence = sentences[idx];
           if (sentence.match, '%s') {
 
-            var question = new Hellberg.FactQuestionTemplate({
+            var template = new Hellberg.FactQuestionTemplate({
               format: sentence.replace(/^\s+/gi, '')
             });
+
+            var question = new Hellberg.Question({
+              question: template.question(),
+              answer: answer
+            });
+
             questions.push(question);
           }
         }
 
         wikidfd.resolve(questions);
       }
-
-
     });
 
     var fsqdfd = $q.defer();
@@ -151,11 +159,13 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
     $q.all([wikidfd.promise, fsqdfd.promise]).then(function(res) {
       var question_set = new Hellberg.QuestionSet();
-
       var questions = res[0];
+
       for (var idx = 0; idx < 5; idx++) {
-        question_set.add(questions[idx]);
+        var q = questions[idx];
+        question_set.add(q);
       }
+
       dfd.resolve(question_set);
     });
 

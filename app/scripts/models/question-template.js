@@ -148,6 +148,9 @@ FactQuestionTemplate.prototype = new QuestionTemplate();
 FactQuestionTemplate.prototype.constructor = QuestionTemplate;
 
 FactQuestionTemplate.prototype.question = function() {
+
+  // return this.format;
+
   var q = sprintf(this.format, this.destination_synonym());
   return q.capitalize();
 };
