@@ -97,6 +97,7 @@ angular.module('hellbergApp')
             if (trip_time >= next_question_time) {
               next_question_time += TIME*1000/NUMBER_OF_QUESTIONS;
               $scope.current_score -= 2;
+
               if ($scope.current_score <= 0) {
                 var answer = questions.questions[0].answer.answers[0];
                 $location.path("/result/0/" + answer + "/")
