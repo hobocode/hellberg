@@ -73,8 +73,10 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
         var revision = page.revisions.pop();
 
         var content = revision['*'];
-        content = txtwiki.parseWikitext(content);
 
+        console.log(content); // #redirect [[Vienna]] <= Detta villv iha
+
+        content = txtwiki.parseWikitext(content);
         // refractor into library - ugly-regex.js :D LOL
 
         content = content.replace(/^[  \s]*\|.*$/gi, '');         // Remove all lines beginning with |
@@ -168,6 +170,9 @@ var app = angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LO
 
       var first_question = parseInt(Math.round(Math.random()), 10);
       var first_question_idx = 2 + parseInt(Math.round(Math.random() * 2), 10);
+
+      console.log("wikipedia_questions.length", wikipedia_questions.length);
+      console.log("wikipedia_questions:", wikipedia_questions);
 
       question_set.add(wikipedia_questions[last_question]);
       question_set.add(wikipedia_questions[(1 - last_question)]);
