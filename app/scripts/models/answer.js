@@ -1,3 +1,4 @@
+'use strict';
 
 var Answer = function(options) {
   if (typeof options === 'undefined' || options === null) {
@@ -76,7 +77,7 @@ Answer.prototype.validate_answer = function(answer) {
   return answer_score < this.score_threshold();
 };
 
-Answer.prototype.score_threshold = function(answer) {
+Answer.prototype.score_threshold = function() {
 
   if (this.answers.length < 1) {
     return 0;
@@ -95,6 +96,6 @@ Answer.prototype.score_threshold = function(answer) {
   return mean_length * this.threshold_value();
 };
 
-var Hellberg = window.Hellberg || {};
-Hellberg.Answer = Answer;
-window.Hellberg = Hellberg;
+var HB = window.Hellberg || {};
+HB.Answer = Answer;
+window.Hellberg = HB;

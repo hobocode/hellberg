@@ -1,12 +1,13 @@
+'use strict';
 
 angular.module('hellbergApp').factory('RouteLoader', ['$q', function($q) {
-  var instance = {}
+  var instance = {};
 
   var fetch_details = function(dep_ref, dest_ref) {
 
     var dfd1 = $q.defer();
 
-    var service = new google.maps.places.PlacesService($("#attribution")[0]);
+    var service = new google.maps.places.PlacesService($('#attribution')[0]);
     service.getDetails({ reference: dep_ref }, function(res) {
       dfd1.resolve(res);
     });
@@ -31,9 +32,8 @@ angular.module('hellbergApp').factory('RouteLoader', ['$q', function($q) {
 
     var directionsService = new google.maps.DirectionsService();
     directionsService.route(request, function(result, status) {
-      var points = [];
 
-      if (status == google.maps.DirectionsStatus.OK) {
+      if (status === google.maps.DirectionsStatus.OK) {
         dfd.resolve(result);
       } else {
         // [todo] - error
@@ -41,7 +41,7 @@ angular.module('hellbergApp').factory('RouteLoader', ['$q', function($q) {
     });
 
     return dfd.promise;
-  }
+  };
 
   instance.fetch = function(dep_ref, dest_ref) {
     var dfd = $q.defer();

@@ -1,3 +1,4 @@
+'use strict';
 
 var Question = function(options) {
   if (typeof options === 'undefined' || options === null) {
@@ -58,7 +59,8 @@ ImageQuestion.prototype = new Question();
 ImageQuestion.prototype.constructor = Question;
 
 
-var Hellberg = window.Hellberg || {};
-Hellberg.Question = Question;
-Hellberg.ImageQuestion = ImageQuestion;
-window.Hellberg = Hellberg;
+var HB = window.Hellberg || {};
+HB.Question = Question;
+HB.ImageQuestion = ImageQuestion;
+window.Hellberg = HB;
+

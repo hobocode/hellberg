@@ -1,12 +1,11 @@
-
-
+'use strict';
 
 angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUNDTRACK) {
-  var instance = {}
+  var instance = {};
 
   var fade = function(audio, interval, ticks, entry_vol, target_vol) {
 
-    tick_interval = interval / ticks;
+    var tick_interval = interval / ticks;
 
     var current_tick = -1;
     var tick_cb = function() {
@@ -23,11 +22,11 @@ angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUN
     tick_cb();
   };
 
-  var fadeIn = function(audio, interval, ticks) {
+  var fade_in = function(audio, interval, ticks) {
     return fade(audio, interval, ticks, 0.0, 1.0);
   };
 
-  var fadeOut = function(audio, interval) {
+  var fade_out = function(audio, interval, ticks) {
     return fade(audio, interval, ticks, 1.0, 0.0);
   };
 
@@ -36,20 +35,20 @@ angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUN
 
     var audio = new Audio();
 
-    audio.addEventListener("play", function () {
-      console.log('sountrack start');
+    audio.addEventListener('play', function () {
+      console.log('soundtrack start');
     }, false);
 
-    audio.addEventListener("ended", function () {
-      console.log('sountrack end');
+    audio.addEventListener('ended', function () {
+      console.log('soundtrack end');
     }, false);
 
-    audio.addEventListener("error", function () {
+    audio.addEventListener('error', function () {
       console.log('error');
-      console.log('sountrack end');
+      console.log('soundtrack error');
     }, false);
 
-    audio.addEventListener("canplay", function() {
+    audio.addEventListener('canplay', function() {
       audio.currentTime = parseInt(SOUNDTRACK.section.start, 10);
     }, false);
 
@@ -58,10 +57,12 @@ angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUN
     audio.src = SOUNDTRACK.url;
     audio.play();
 
-    fadeIn(audio, 10000, 8);
+    fade_in(audio, 10000, 8);
 
     return audio;
   };
+
+  instance.fade_out = fade_out;
 
   return instance;
 }]);

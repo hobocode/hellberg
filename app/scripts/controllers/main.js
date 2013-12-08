@@ -2,7 +2,7 @@
 
 angular.module('hellbergApp')
   .controller('MainCtrl', ['$scope', '$location', function($scope, $location) {
-    $scope.img_index = "0" + Math.floor(Math.round(Math.random() * 9));
+    $scope.img_index = '0' + Math.floor(Math.round(Math.random() * 9));
     $scope.detail1 = null;
     $scope.detail2 = null;
     $scope.options = { types: '(cities)' };
@@ -39,6 +39,6 @@ angular.module('hellbergApp')
       var trip = trips[Math.floor(Math.random()*trips.length)];
       var el = Math.round(Math.random());
       $location.path('/trip/' + trip[el] + '/' + trip[1-el] + '/');
-    }
+    };
 
   }]);

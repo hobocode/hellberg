@@ -1,3 +1,4 @@
+'use strict';
 
 var TripLocation = function(options) {
   if (typeof options === 'undefined' || options === null) {
@@ -28,7 +29,6 @@ var TripLocation = function(options) {
 TripLocation.prototype.LOCATION_TYPE_DEPARTURE = 'departure';
 TripLocation.prototype.LOCATION_TYPE_DESTINATION = 'destination';
 
-var Hellberg = window.Hellberg || {};
-Hellberg.TripLocation = TripLocation;
-window.Hellberg = Hellberg;
-
+var HB = window.Hellberg || {};
+HB.TripLocation = TripLocation;
+window.Hellberg = HB;

@@ -1,8 +1,8 @@
-
+'use strict';
 
 angular.module('hellbergApp').factory('Speak', ['LOCALE', function(LOCALE) {
-  var instance = {}
-
+  var instance = {};
+  var justSpoke;
 
   instance.speak = function(text) {
     if (!text) {
@@ -12,16 +12,16 @@ angular.module('hellbergApp').factory('Speak', ['LOCALE', function(LOCALE) {
     var audioURL = ['http://www.corsproxy.com/', 'translate.google.com/translate_tts?ie=UTF-8&q=', text , '&tl=', encodeURIComponent(LOCALE.locale)].join('');
     var audio = new Audio();
 
-    audio.addEventListener("play", function () {
+    audio.addEventListener('play', function () {
       console.log('isSpeaking start');
     }, false);
 
-    audio.addEventListener("ended", function () {
+    audio.addEventListener('ended', function () {
       justSpoke = true;
       console.log('isSpeaking end');
     }, false);
 
-    audio.addEventListener("error", function (e) {
+    audio.addEventListener('error', function (e) {
       console.log('error', e);
       console.log('isSpeaking end');
     }, false);

@@ -19,7 +19,6 @@ angular.module('hellbergApp')
         var NUMBER_OF_QUESTIONS = 5;
         var NPTS = 200; // number of points
         var TIME = 50; // total time in seconds
-        var TIME_PER_QUESTION = TIME/NUMBER_OF_QUESTIONS;
 
         $scope.loader_progress = 0;
         $scope.loader_total = NPTS;
@@ -47,13 +46,13 @@ angular.module('hellbergApp')
             var question = questions.get_question(question_idx);
             var correct = question.validate_answer(answer);
             if (correct) {
-              $location.path("/result/" + $scope.current_score + "/" + question.answer.answers[0] + "/")
+              $location.path('/result/' + $scope.current_score + '/' + question.answer.answers[0] + '/');
             } else {
               $scope.show_wrong = true;
               $scope.show_input = false;
               $timeout(function() {
                 $scope.show_wrong = false;
-                $scope.answer = "";
+                $scope.answer = '';
                 play();
               }, 3000);
             }
@@ -74,7 +73,7 @@ angular.module('hellbergApp')
 
           $scope.current_score = 2*(NUMBER_OF_QUESTIONS+1);
           $scope.trip_progress = 0;
-          $scope.question = "";
+          $scope.question = '';
 
           $scope.brake = function() {
             if (paused) {
@@ -82,11 +81,11 @@ angular.module('hellbergApp')
             } else {
               pause();
             }
-            $(".brake").addClass("pull");
+            $('.brake').addClass('pull');
             $timeout(function() {
-              $(".brake").removeClass("pull");
+              $('.brake').removeClass('pull');
             }, 100);
-          }
+          };
 
           var td = 50;
           loop = function() {
@@ -100,7 +99,7 @@ angular.module('hellbergApp')
 
               if ($scope.current_score <= 0) {
                 var answer = questions.questions[0].answer.answers[0];
-                $location.path("/result/0/" + answer + "/")
+                $location.path('/result/0/' + answer + '/');
               } else {
                 var text = questions.get_question(question_idx--).question;
                 $scope.question = text;
@@ -114,7 +113,7 @@ angular.module('hellbergApp')
 
           };
           loop();
-        }
+        };
 
         hyperlapse = new Hyperlapse(document.getElementById('pano'), {
           use_lookat: false,
@@ -126,7 +125,7 @@ angular.module('hellbergApp')
           millis : TIME/NPTS*1000
         });
 
-        hyperlapse.onLoadProgress = function(e) {
+        hyperlapse.onLoadProgress = function() {
           $scope.$apply(function() {
             $scope.loader_progress++;
           });
@@ -140,11 +139,11 @@ angular.module('hellbergApp')
           console.log(e);
         };
 
-        hyperlapse.onRouteComplete = function(e) {
+        hyperlapse.onRouteComplete = function() {
           hyperlapse.load();
         };
 
-        hyperlapse.onLoadComplete = function(e) {
+        hyperlapse.onLoadComplete = function() {
           hyperlapse.play();
           start();
         };

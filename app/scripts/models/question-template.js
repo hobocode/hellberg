@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * Wikipedia
  * =========
@@ -15,9 +17,10 @@
  */
 
 
- String.prototype.capitalize = function() {
-     return this.charAt(0).toUpperCase() + this.slice(1);
- }
+// [todo] - Don't add functions to prototype
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
 var QuestionTemplate = function(options) {
   if (typeof options === 'undefined' || options === null) {
@@ -49,15 +52,15 @@ QuestionTemplate.prototype.departure_synonyms = [
     // "Vår resa tar sin början i en ort som",
     // "Vi lämnar en ort som",
     // "Vi reser från en ort som"
-    "our point of departure",
-    "our starting location"
+    'our point of departure',
+    'our starting location'
   ];
 
 QuestionTemplate.prototype.destination_synonyms = [
     // "Vi är på väg till en ort som",
     // "Vi rör oss mot en ort som",
-    "our destination",
-    "the destination of our trip"
+    'our destination',
+    'the destination of our trip'
   ];
 
 QuestionTemplate.prototype.departure_synonym = function(idx) {
@@ -70,7 +73,7 @@ QuestionTemplate.prototype.destination_synonym = function(idx) {
 
 QuestionTemplate.prototype.location_synonym = function(idx) {
 
-  if (this.location.type == Hellberg.TripLocation.prototype.LOCATION_TYPE_DEPARTURE) {
+  if (this.location.type === Hellberg.TripLocation.prototype.LOCATION_TYPE_DEPARTURE) {
     return this._random_array_idx(this.departure_synonym, idx);
   }
 
@@ -168,8 +171,8 @@ FactQuestionTemplate.prototype.template_fillers = [
 FactQuestionTemplate.prototype.question = function() {
 
   var shuffle_array = function(o){
-      for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-      return o;
+    for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x) {}
+    return o;
   };
 
   var params = [
@@ -188,17 +191,8 @@ FactQuestionTemplate.prototype.question = function() {
 
 
 
-var Hellberg = window.Hellberg || {};
-Hellberg.QuestionTemplate = QuestionTemplate;
-Hellberg.VenueQuestionTemplate = VenueQuestionTemplate;
-Hellberg.FactQuestionTemplate = FactQuestionTemplate;
-window.Hellberg = Hellberg;
-
-
-
-// vqt = new VenueQuestionTemplate({
-//   name: 'Solde',
-//   category: 'Cafe'
-// });
-
-// console.log(vqt.question());
+var HB = window.Hellberg || {};
+HB.QuestionTemplate = QuestionTemplate;
+HB.VenueQuestionTemplate = VenueQuestionTemplate;
+HB.FactQuestionTemplate = FactQuestionTemplate;
+window.Hellberg = HB;

@@ -1,3 +1,4 @@
+'use strict';
 
 var QuestionSet = function(options) {
   if (typeof options === 'undefined' || options === null) {
@@ -30,7 +31,7 @@ QuestionSet.prototype.get_question = function(idx) {
 
 QuestionSet.prototype.set_question = function(question, idx) {
   question.index = idx;
-  return this.questions[idx] = question;
+  this.questions[idx] = question;
 };
 
 QuestionSet.prototype.add = function(question) {
@@ -46,6 +47,6 @@ QuestionSet.prototype.add = function(question) {
 };
 
 
-var Hellberg = window.Hellberg || {};
-Hellberg.QuestionSet = QuestionSet;
-window.Hellberg = Hellberg;
+var HB = window.Hellberg || {};
+HB.QuestionSet = QuestionSet;
+window.Hellberg = HB;
