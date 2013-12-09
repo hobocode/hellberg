@@ -60,6 +60,7 @@ angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LOCALE', fun
     var parse_wikipedia_page = function(response) {
       var data = response.data;
       var sentence_min_length = 25;
+      var pattern =  /^#redirect\s+\[\[([^\]]+)\]\]/gim; // new RegExp(/(^#redirect\s+\[\[([^\]]+)\]\])/gim);
 
       for (var pid in data.query.pages) {
         var page = data.query.pages[pid];
@@ -67,13 +68,20 @@ angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LOCALE', fun
 
         var content = revision['*'];
 
-        var lcontent = content.toLowerCase();
-        var idx = lcontent.indexOf('#redirect [[');
+        // console.log("Content:", content);
 
-        if (idx === 0) {
-          content = content.substr(idx+'#redirect [['.length);
-          idx = content.indexOf(']]');
-          var destname = content.substr(0, idx);
+        var matches = pattern.exec(content);
+        var destname = false;
+
+        console.log(matches, matches.length);
+
+        if (matches.length > 1) {
+          destname = matches.pop();
+
+          console.log("destname:", destname);
+        }
+
+        if (destname != false) {
           return {
             'type' : 'redirect',
             'name' : destname
