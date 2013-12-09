@@ -1,11 +1,10 @@
 'use strict';
 
 angular.module('hellbergApp', [
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
   'ngRoute',
-  'ngAutocomplete'
+  'ngAutocomplete',
+  'angulartics',
+  'angulartics.google.analytics'
 ])
 .constant('LOCALE', {
   lang: 'en',

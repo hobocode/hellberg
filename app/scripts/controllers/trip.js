@@ -5,6 +5,7 @@ angular.module('hellbergApp')
 
     $scope.points = 10;
     $scope.loading = true;
+    $scope.indeterminate = true;
 
     RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
 
@@ -140,6 +141,7 @@ angular.module('hellbergApp')
         };
 
         hyperlapse.onRouteComplete = function() {
+          $scope.indeterminate = false;
           hyperlapse.load();
         };
 
