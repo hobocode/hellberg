@@ -1,5 +1,7 @@
 Hellberg
 ========
+**Demo:**  [http://hobocode.github.com/hellberg](http://hobocode.github.com/hellberg)
+
 Hellberg is a location based "game" that let's you travel from one location to another, accompanied by imagery downloaded from Google Streetview, all while giving you clues about the destination of the trip, very much inspired by the Swedish TV show [På spåret](http://www.svt.se/pa-sparet/).
 
 The app is pretty much a proof of concept, developed by [Gustaf Lindqvist](http://github.com/gstf) & [Simon Fransson](http://github.com/dessibelle) at #locationday 2013 in Malmö, Sweden. Being the product of a 24 h hackathon it is somewhat limited in functionality, and the gaming aspects of it should probably be tweaked a great deal before it has any potential of entertain anyone for more than a few minutes.
