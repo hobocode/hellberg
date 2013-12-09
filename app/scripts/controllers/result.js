@@ -6,6 +6,6 @@ angular.module('hellbergApp')
     $scope.answer = $routeParams.answer;
 
     $scope.play = function() {
-      $location.path("/");
+      $location.path('/');
     };
   }]);
