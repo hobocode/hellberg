@@ -9,6 +9,8 @@ angular.module('hellbergApp')
 
     RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
 
+      Soundtrack.play();
+
       Questions.fetch(res[0].name, res[1].name, [{
         lng : res[0].geometry.location.lng(),
         lat : res[0].geometry.location.lat()
@@ -27,8 +29,6 @@ angular.module('hellbergApp')
 
         var start = function() {
           var play, pause, loop;
-
-          Soundtrack.play();
 
           $scope.$apply(function() {
             $scope.loading = false;
@@ -62,12 +62,14 @@ angular.module('hellbergApp')
           pause = function() {
             paused = true;
             hyperlapse.pause();
+            Soundtrack.duck();
             $scope.show_input = true;
           };
 
           play = function() {
             paused = false;
             loop();
+            Soundtrack.unduck();
             hyperlapse.play();
             $scope.show_input = false;
           };
