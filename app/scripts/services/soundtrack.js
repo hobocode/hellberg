@@ -5,8 +5,6 @@ angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUN
     audio: null,
   };
 
-  window.audio_debug = instance;
-
   var fade = function(audio, interval, ticks, entry_vol, target_vol) {
     if (!audio) {
       return false;
