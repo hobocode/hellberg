@@ -8,7 +8,7 @@ The app is pretty much a proof of concept, developed by [Gustaf Lindqvist](http:
 
 As most Swedish people can probably tell, the name "Hellberg" is borrowed from [Björn Hellberg](http://en.wikipedia.org/wiki/Bj%C3%B6rn_Hellberg), who served as judge on the show.
 
-Heard enough already? Go [try it out](http://hobocode.github.com/hellberg/)!
+Heard enough already? Go [try it out](http://hobocode.github.com/hellberg/)! (you should probaby use Google Chrome by the way)
 
 ##What does it do?
 Hellberg does five things:
@@ -36,6 +36,7 @@ Requires [npm](https://npmjs.org), [bower](https://github.com/bower/bower) and [
 * If no Wikipedia page exists / was found for your destination, things will fail. 
 * Phrasing of generated hints might be a bit off at times, grammatically.
 * Figuring out the destination when you supplied it to the app yourself isn't all that exciting, so the hints will be pretty much useless in that case.
+* Works best (only?) in Google Chrome at the moment.
 
 Logo and graphics created by [Carl Hagerling](http://hagerling.se/).
 

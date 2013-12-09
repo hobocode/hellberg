@@ -76,7 +76,7 @@ angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LOCALE', fun
           answer.add_answer(destname);
         }
 
-        if (destname != false) {
+        if (destname !== false) {
           return {
             'type' : 'redirect',
             'name' : destname

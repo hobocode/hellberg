@@ -5,7 +5,7 @@ angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUN
     audio: null,
   };
 
-  var ducking_volume = 0.25;
+  window.audio_debug = instance;
 
   var fade = function(audio, interval, ticks, entry_vol, target_vol) {
     if (!audio) {
@@ -45,7 +45,7 @@ angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUN
       return false;
     }
 
-    fade(instance.audio, 1000, 10, instance.audio.volume, ducking_volume);
+    fade(instance.audio, 1000, 10, instance.audio.volume, SOUNDTRACK.ducking_volume);
   };
 
   instance.unduck = function() {
@@ -66,17 +66,26 @@ angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUN
     fade_out(instance.audio, interval, 10);
 
     setTimeout(function() {
-      instance.audio.pause;
+      instance.audio.pause();
     }, interval);
   };
 
   instance.play = function() {
 
-    var start_time = parseInt(SOUNDTRACK.section.start, 10);
+    var start_playback = function() {
+      instance.audio.currentTime = SOUNDTRACK.section.start;
 
+      instance.audio.volume = 0.0;
+      instance.audio.play();
+      fade_in(instance.audio, 15000, 8);
+    };
 
     if (!instance.audio) {
       instance.audio = new Audio();
+
+      instance.audio.autoplay = false;
+      instance.audio.loop = true;
+      instance.audio.src = SOUNDTRACK.url;
 
       instance.audio.addEventListener('play', function () {
         console.log('soundtrack start');
@@ -92,19 +101,12 @@ angular.module('hellbergApp').factory('Soundtrack', ['SOUNDTRACK', function(SOUN
       }, false);
 
       instance.audio.addEventListener('canplay', function() {
-        instance.audio.currentTime = start_time;
+        start_playback();
       }, false);
 
-      instance.audio.autoplay = false;
-      instance.audio.loop = true;
-      instance.audio.src = SOUNDTRACK.url;
     } else {
-      instance.audio.currentTime = start_time;
+      start_playback();
     }
-
-    instance.audio.volume = 0.0;
-    instance.audio.play();
-    fade_in(instance.audio, 15000, 8);
 
     return instance.audio;
   };

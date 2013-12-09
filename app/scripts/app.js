@@ -12,6 +12,7 @@ angular.module('hellbergApp', [
 })
 .constant('SOUNDTRACK', {
   url: 'resources/kobenhavns-jernbane-damp-galop.m4a',
+  ducking_volume: 0.25,
   section: {
     start: (60.0 * 1 + 15.0),
     end: (60.0 * 4 + 8.0)     // Not in use at the moment
