@@ -1,0 +1,64 @@
+<div class="row">
+
+  <div class="col-md-3"><img src="images/e54e2b71.logo-horizontal.png" class="img-responsive trip-logo"></div>
+  <div class="col-md-2 col-md-offset-7 brake" ng-show="!loading"><a href="" ng-click="brake(); focusInput=true"><img src="/images/445b3fd9.stop.svg" class="img-responsive"></a></div>
+
+</div>
+
+<div class="row" ng-show="loading">
+
+  <div class="col-md-3" style="padding-left: 35px">
+    <div class="progress">
+      <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{ 100*loader_progress/loader_total }}%">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div ng-show="!loading">
+
+  <div id="pano"></div>
+
+  <div class="container" ng-show="show_input">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <form ng-submit="submit()">
+          <input type="text" class="form-control input-xxxlg text-center" ng-model="answer" focus-me="focusInput">
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container result" ng-show="show_wrong">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="jumbotron">
+          <h1 class="text-center">Wrong!</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div id="attribution"></div>
+
+  <div class="trip-data">
+
+    <div class="progress">
+      <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ trip_progress }}%">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3 score">
+        {{ current_score }}
+      </div>
+      <div class="col-md-9 question">
+        {{ question }}
+      </div>
+    </div>
+  </div>
+
+</div>
