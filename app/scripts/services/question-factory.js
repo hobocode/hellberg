@@ -68,17 +68,12 @@ angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LOCALE', fun
 
         var content = revision['*'];
 
-        // console.log("Content:", content);
-
         var matches = pattern.exec(content);
         var destname = false;
 
-        console.log(matches, matches.length);
-
-        if (matches.length > 1) {
+        if (matches && matches.length > 1) {
           destname = matches.pop();
-
-          console.log("destname:", destname);
+          answer.add_answer(destname);
         }
 
         if (destname != false) {
@@ -103,7 +98,8 @@ angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LOCALE', fun
           content = $('<div />').html(content).text();                                    // Remove all HTML entities
 
           content = content.replace(/%/gi, '%%');                                   // Escape any % char
-          content = content.replace(new RegExp(dest.name, 'gi'), '%s');       // Replace all instances of city name with %s
+
+          content = content.replace(new RegExp(answer.answers.join('|'), 'gi'), '%s');       // Replace all instances of city name with %s
           content = content.replace(/\s+,\s+/gi, ', ');                       // Fix commas
 
           var boundary = '#####';
