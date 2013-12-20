@@ -1,52 +1,56 @@
 'use strict';
 
-var QuestionSet = function(options) {
-  if (typeof options === 'undefined' || options === null) {
-    options = {};
-  }
+(function() {
 
-  var defaults = {
-    questions: [],
-  };
-
-  for (var key in defaults) {
-    var value = null;
-    if (key in options) {
-      value = options[key];
-    } else {
-      value = defaults[key];
+  var QuestionSet = function(options) {
+    if (typeof options === 'undefined' || options === null) {
+      options = {};
     }
 
-    this[key] = value;
-  }
-};
+    var defaults = {
+      questions: [],
+    };
 
-QuestionSet.prototype.questions = function() {
-  return this.questions;
-};
+    for (var key in defaults) {
+      var value = null;
+      if (key in options) {
+        value = options[key];
+      } else {
+        value = defaults[key];
+      }
 
-QuestionSet.prototype.get_question = function(idx) {
-  return this.questions[idx];
-};
+      this[key] = value;
+    }
+  };
 
-QuestionSet.prototype.set_question = function(question, idx) {
-  question.index = idx;
-  this.questions[idx] = question;
-};
+  QuestionSet.prototype.questions = function() {
+    return this.questions;
+  };
 
-QuestionSet.prototype.add = function(question) {
+  QuestionSet.prototype.get_question = function(idx) {
+    return this.questions[idx];
+  };
 
-  console.log(question);
+  QuestionSet.prototype.set_question = function(question, idx) {
+    question.index = idx;
+    this.questions[idx] = question;
+  };
 
-  if (question.index < 0) {
-    question.index = this.questions.length;
-    return this.questions.push(question);
-  }
+  QuestionSet.prototype.add = function(question) {
 
-  return this.set_question(question, question.index);
-};
+    console.log(question);
+
+    if (question.index < 0) {
+      question.index = this.questions.length;
+      return this.questions.push(question);
+    }
+
+    return this.set_question(question, question.index);
+  };
 
 
-var HB = window.Hellberg || {};
-HB.QuestionSet = QuestionSet;
-window.Hellberg = HB;
+  var HB = window.Hellberg || {};
+  HB.QuestionSet = QuestionSet;
+  window.Hellberg = HB;
+
+})();
