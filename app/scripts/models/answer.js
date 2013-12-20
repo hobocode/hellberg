@@ -1,101 +1,105 @@
 'use strict';
 
-var Answer = function(options) {
-  if (typeof options === 'undefined' || options === null) {
-    options = {};
-  }
+(function() {
 
-  var defaults = {
-    answers: [],
-    threshold: 0.65
+  var Answer = function(options) {
+    if (typeof options === 'undefined' || options === null) {
+      options = {};
+    }
+
+    var defaults = {
+      answers: [],
+      threshold: 0.65
+    };
+
+    for (var key in defaults) {
+      var value = null;
+      if (key in options) {
+        value = options[key];
+      } else {
+        value = defaults[key];
+      }
+
+      this[key] = value;
+    }
   };
 
-  for (var key in defaults) {
-    var value = null;
-    if (key in options) {
-      value = options[key];
-    } else {
-      value = defaults[key];
+  Answer.prototype.threshold_value = function() {
+    return this.threshold;
+  };
+
+  Answer.prototype.get_answers = function() {
+    return this.answers;
+  };
+
+  Answer.prototype.add_answer = function(answer) {
+    return this.answers.push(answer);
+  };
+
+  Answer.prototype.evaluate_answer = function(user_answer) {
+
+    var answer_results = [];
+    user_answer = user_answer.toLowerCase();
+
+    var answer;
+    for (var i = 0; i < this.answers.length; i++) {
+      answer = this.answers[i];
+      answer_results.push( new Levenshtein(answer.toLowerCase(), user_answer) );
     }
 
-    this[key] = value;
-  }
-};
+    return answer_results;
+  };
 
-Answer.prototype.threshold_value = function() {
-  return this.threshold;
-};
+  Answer.prototype.answer_score = function(answer) {
 
-Answer.prototype.get_answers = function() {
-  return this.answers;
-};
+    var answer_results = this.evaluate_answer(answer);
+    var best_score = Number.MAX_VALUE;
 
-Answer.prototype.add_answer = function(answer) {
-  return this.answers.push(answer);
-};
+    if (answer_results.length < 1) {
+      return best_score;
+    }
 
-Answer.prototype.evaluate_answer = function(user_answer) {
+    var idx;
+    for (idx = 0; idx < answer_results.length; idx++) {
+      var l = answer_results[idx];
 
-  var answer_results = [];
-  user_answer = user_answer.toLowerCase();
+      var score = l.distance;
 
-  var answer;
-  for (var i = 0; i < this.answers.length; i++) {
-    answer = this.answers[i];
-    answer_results.push( new Levenshtein(answer.toLowerCase(), user_answer) );
-  }
+      if (score < best_score) {
+        best_score = score;
+      }
+    }
 
-  return answer_results;
-};
-
-Answer.prototype.answer_score = function(answer) {
-
-  var answer_results = this.evaluate_answer(answer);
-  var best_score = Number.MAX_VALUE;
-
-  if (answer_results.length < 1) {
     return best_score;
-  }
+  };
 
-  var idx;
-  for (idx = 0; idx < answer_results.length; idx++) {
-    var l = answer_results[idx];
+  Answer.prototype.validate_answer = function(answer) {
+    var answer_score = this.answer_score(answer);
 
-    var score = l.distance;
+    return answer_score < this.score_threshold();
+  };
 
-    if (score < best_score) {
-      best_score = score;
+  Answer.prototype.score_threshold = function() {
+
+    if (this.answers.length < 1) {
+      return 0;
     }
-  }
 
-  return best_score;
-};
+    var mean_length;
+    var total_length = 0;
 
-Answer.prototype.validate_answer = function(answer) {
-  var answer_score = this.answer_score(answer);
+    var idx;
+    for (idx = 0; idx < this.answers.length; idx++) {
+      total_length += this.answers[idx].length;
+    }
 
-  return answer_score < this.score_threshold();
-};
+    mean_length = Math.round(total_length / this.answers.length);
 
-Answer.prototype.score_threshold = function() {
+    return mean_length * this.threshold_value();
+  };
 
-  if (this.answers.length < 1) {
-    return 0;
-  }
+  var HB = window.Hellberg || {};
+  HB.Answer = Answer;
+  window.Hellberg = HB;
 
-  var mean_length;
-  var total_length = 0;
-
-  var idx;
-  for (idx = 0; idx < this.answers.length; idx++) {
-    total_length += this.answers[idx].length;
-  }
-
-  mean_length = Math.round(total_length / this.answers.length);
-
-  return mean_length * this.threshold_value();
-};
-
-var HB = window.Hellberg || {};
-HB.Answer = Answer;
-window.Hellberg = HB;
+})();

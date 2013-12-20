@@ -1,66 +1,57 @@
 'use strict';
 
-var Question = function(options) {
-  if (typeof options === 'undefined' || options === null) {
-    options = {};
-  }
-
-  var defaults = {
-    index: -1,
-    question: null,
-    answer: null
-  };
-
-  for (var key in defaults) {
-    var value = null;
-    if (key in options) {
-      value = options[key];
-    } else {
-      value = defaults[key];
+(function() {
+  var Question = function(options) {
+    if (typeof options === 'undefined' || options === null) {
+      options = {};
     }
 
-    this[key] = value;
-  }
-};
+    var defaults = {
+      index: -1,
+      question: null,
+      answer: null,
+      difficulty: 0.0
+    };
 
-// Question.prototype.score = function() {
-//   return (this.index + 1) * 2;
-// };
+    for (var key in defaults) {
+      var value = null;
+      if (key in options) {
+        value = options[key];
+      } else {
+        value = defaults[key];
+      }
 
-Question.prototype.validate_answer = function(answer) {
-  return this.answer.validate_answer(answer);
-};
-
-
-var ImageQuestion = function(options) {
-
-  if (typeof options === 'undefined' || options === null) {
-    options = {};
-  }
-
-  Question.call(this, options);
-
-  var defaults = {
-    image: null
+      this[key] = value;
+    }
   };
 
-  for (var key in defaults) {
-    var value = null;
-    if (key in options) {
-      value = options[key];
-    } else {
-      value = defaults[key];
-    }
+  // Question.prototype.score = function() {
+  //   return (this.index + 1) * 2;
+  // };
 
-    this[key] = value;
-  }
-};
-ImageQuestion.prototype = new Question();
-ImageQuestion.prototype.constructor = Question;
+  Question.prototype.get_diffucilty = function() {
+
+    var adjust = function( adj, min, max ) {
+      if ( isNaN( min ) ) {
+        min = -Infinity;
+      }
+
+      if ( isNaN( max ) ) {
+        max = Infinity;
+      }
+      return adj < min ? min : adj > max ? max : adj;
+    };
+
+    return adjust(this.difficulty, 0.0, 0.99999999999999999);
+  };
+
+  Question.prototype.validate_answer = function(answer) {
+    return this.answer.validate_answer(answer);
+  };
 
 
-var HB = window.Hellberg || {};
-HB.Question = Question;
-HB.ImageQuestion = ImageQuestion;
-window.Hellberg = HB;
+  var HB = window.Hellberg || {};
+  HB.Question = Question;
+  window.Hellberg = HB;
 
+})();

@@ -1,34 +1,38 @@
 'use strict';
 
-var TripLocation = function(options) {
-  if (typeof options === 'undefined' || options === null) {
-    options = {};
-  }
+;(function() {
 
-  var defaults = {
-    name: null,
-    coordinate: {
-      lat: 0.0,
-      lng: 0.0
-    },
-    type: TripLocation.prototype.LOCATION_TYPE_DESTINATION
-  };
-
-  for (var key in defaults) {
-    var value = null;
-    if (key in options) {
-      value = options[key];
-    } else {
-      value = defaults[key];
+  var TripLocation = function(options) {
+    if (typeof options === 'undefined' || options === null) {
+      options = {};
     }
 
-    this[key] = value;
-  }
-};
+    var defaults = {
+      name: null,
+      coordinate: {
+        lat: 0.0,
+        lng: 0.0
+      },
+      type: TripLocation.prototype.LOCATION_TYPE_DESTINATION
+    };
 
-TripLocation.prototype.LOCATION_TYPE_DEPARTURE = 'departure';
-TripLocation.prototype.LOCATION_TYPE_DESTINATION = 'destination';
+    for (var key in defaults) {
+      var value = null;
+      if (key in options) {
+        value = options[key];
+      } else {
+        value = defaults[key];
+      }
 
-var HB = window.Hellberg || {};
-HB.TripLocation = TripLocation;
-window.Hellberg = HB;
+      this[key] = value;
+    }
+  };
+
+  TripLocation.prototype.LOCATION_TYPE_DEPARTURE = 'departure';
+  TripLocation.prototype.LOCATION_TYPE_DESTINATION = 'destination';
+
+  var HB = window.Hellberg || {};
+  HB.TripLocation = TripLocation;
+  window.Hellberg = HB;
+
+})();
