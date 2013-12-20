@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('hellbergApp')
-  .controller('TripCtrl', ['$scope', '$routeParams', '$q', '$timeout', '$location', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack',
-    function ($scope, $routeParams, $q, $timeout, $location, RouteLoader, Questions, Speak, Soundtrack)
+  .controller('TripCtrl', ['$scope', '$q', '$timeout', '$location', 'State', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack',
+    function ($scope, $q, $timeout, $location, State, RouteLoader, Questions, Speak, Soundtrack)
 {
   var start, pause, play, loop;
 
@@ -65,7 +65,8 @@ angular.module('hellbergApp')
     var correct = question.validate_answer(answer);
     $scope.paused = true;
     if (correct) {
-      $location.path('/result/' + $scope.current_score + '/' + question.answer.answers[0] + '/');
+      State.score = $scope.current_score;
+      $location.path('/result/');
     } else {
       $scope.show_wrong = true;
       $scope.show_input = false;
@@ -89,8 +90,8 @@ angular.module('hellbergApp')
       $scope.current_score -= 2;
 
       if ($scope.current_score <= 0) {
-        var answer = questions.questions[0].answer.answers[0];
-        $location.path('/result/0/' + answer + '/');
+        State.score = $scope.current_score;
+        $location.path('/result/');
       } else {
         var text = questions.get_question(question_idx--).question;
         $scope.question = text;
@@ -120,17 +121,26 @@ angular.module('hellbergApp')
     loop();
   };
 
+  RouteLoader.fetch(State.dep_ref, State.dest_ref).then(function(res) {
+    var dest, dep, destloc, deploc;
+    dep = res[0];
+    dest = res[1];
+    deploc = dep.geometry.location;
+    destloc = dest.geometry.location;
 
-  RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
+    State.dep = dep;
+    State.dest = dest;
 
-    Questions.fetch(res[0].name, res[1].name, [{
-      lng : res[0].geometry.location.lng(),
-      lat : res[0].geometry.location.lat()
+    Questions.fetch(dep.name, dest.name, [{
+      lng : deploc.lng(),
+      lat : destloc.lat()
     }, {
-      lng : res[1].geometry.location.lng(),
-      lat : res[1].geometry.location.lat()
+      lng : destloc.lng(),
+      lat : destloc.lat()
     }]).then(function(qobj) {
       questions = qobj;
+
+      State.route = res[2];
       $scope.route = res[2];
     });
 

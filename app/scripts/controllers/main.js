@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('hellbergApp')
-  .controller('MainCtrl', ['$scope', '$location', function($scope, $location) {
+  .controller('MainCtrl', ['$scope', '$location', 'State', function($scope, $location, State) {
     $scope.bg_image = 'images/cover/0' + Math.floor(Math.round(Math.random() * 9)) + '.jpg';
     $scope.detail1 = null;
     $scope.detail2 = null;
     $scope.options = { types: '(cities)' };
+
+    State.reset();
 
     $scope.trip = function() {
       if (!$scope.detail1 || !$scope.detail2) {
@@ -36,9 +38,12 @@ angular.module('hellbergApp')
         ]
       ];
 
+
       var trip = trips[Math.floor(Math.random()*trips.length)];
       var el = Math.round(Math.random());
-      $location.path('/trip/' + trip[el] + '/' + trip[1-el] + '/');
+      State.dep_ref = trip[el];
+      State.dest_ref = trip[1-el];
+      $location.path('/trip/');
     };
 
   }]);

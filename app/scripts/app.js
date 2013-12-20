@@ -37,11 +37,11 @@ angular.module('hellbergApp', [
       templateUrl: 'views/main.html',
       controller: 'MainCtrl'
     })
-    .when('/trip/:dep_ref/:dest_ref/', {
+    .when('/trip/', {
       templateUrl: 'views/trip.html',
       controller: 'TripCtrl'
     })
-    .when('/result/:score/:answer/', {
+    .when('/result/', {
       templateUrl: 'views/result.html',
       controller: 'ResultCtrl'
     })
