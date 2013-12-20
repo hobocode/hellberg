@@ -8,7 +8,7 @@
     }
 
     var defaults = {
-      questions: [],
+      questions: []
     };
 
     for (var key in defaults) {
@@ -21,6 +21,22 @@
 
       this[key] = value;
     }
+  };
+
+  QuestionSet.union = function() {
+
+    var question_set = new QuestionSet();
+
+    for (var i = 0; i < arguments.length; i++) {
+      var set = arguments[i];
+
+      for (var j = 0; j < set.questions.length; j++) {
+        var question = set.questions[j];
+        question_set.add(question);
+      }
+    }
+
+    return question_set;
   };
 
   QuestionSet.prototype.questions = function() {
@@ -37,8 +53,6 @@
   };
 
   QuestionSet.prototype.add = function(question) {
-
-    console.log(question);
 
     if (question.index < 0) {
       question.index = this.questions.length;

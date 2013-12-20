@@ -31,7 +31,7 @@
 
     var defaults = {
       template_string: null,
-      location: null,
+      location: null
     };
 
     for (var key in defaults) {
