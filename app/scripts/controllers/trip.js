@@ -1,10 +1,18 @@
 'use strict';
 
 angular.module('hellbergApp')
-  .controller('TripCtrl', ['$scope', '$q', '$timeout', '$location', 'State', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack',
-    function ($scope, $q, $timeout, $location, State, RouteLoader, Questions, Speak, Soundtrack)
+  .controller('TripCtrl', ['$scope', '$q', '$timeout', '$location', '$routeParams', 'State', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack', 'GLOBALS',
+    function ($scope, $q, $timeout, $location, $routeParams, State, RouteLoader, Questions, Speak, Soundtrack, GLOBALS)
 {
-  var start, pause, play, loop;
+  var pause, play, loop;
+
+  // no need to start from beginning if GLOBALS.debug is true
+  if (GLOBALS.debug && $routeParams.dep_ref) {
+    State.dep_ref = $routeParams.dep_ref;
+    State.dest_ref = $routeParams.dest_ref;
+  } else if (!State.dep_ref) {
+    $location.path('/');
+  }
 
   var NQUESTIONS = 5; // number of questions
   var NPTS = 200; // number of points
@@ -28,13 +36,13 @@ angular.module('hellbergApp')
     $scope.$apply(function() {
       $scope.indeterminate = false;
     });
-  }
+  };
 
   $scope.progress = function() {
     $scope.$apply(function() {
       $scope.loader_progress = $scope.loader_progress+1;
     });
-  }
+  };
 
   pause = function() {
     $scope.paused = true;

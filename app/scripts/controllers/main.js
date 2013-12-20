@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('hellbergApp')
-  .controller('MainCtrl', ['$scope', '$location', 'State', function($scope, $location, State) {
+  .controller('MainCtrl', ['$scope', '$location', 'State', 'GLOBALS', function($scope, $location, State, GLOBALS) {
     $scope.bg_image = 'images/cover/0' + Math.floor(Math.round(Math.random() * 9)) + '.jpg';
     $scope.detail1 = null;
     $scope.detail2 = null;
@@ -43,7 +43,12 @@ angular.module('hellbergApp')
       var el = Math.round(Math.random());
       State.dep_ref = trip[el];
       State.dest_ref = trip[1-el];
-      $location.path('/trip/');
+
+      if (GLOBALS.debug) {
+        $location.path('/trip/' + State.dep_ref + '/' + State.dest_ref + '/');
+      } else {
+        $location.path('/trip/');
+      }
     };
 
   }]);

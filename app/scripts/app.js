@@ -18,6 +18,9 @@ angular.module('hellbergApp', [
     end: (60.0 * 4 + 8.0)     // Not in use at the moment
   }
 })
+.constant('GLOBALS', {
+  debug : true
+})
 .directive('focusMe', function() {
   return {
     scope: { trigger: '=focusMe' },
@@ -31,13 +34,13 @@ angular.module('hellbergApp', [
     }
   };
 })
-.config(function ($routeProvider) {
+.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'views/main.html',
       controller: 'MainCtrl'
     })
-    .when('/trip/', {
+    .when('/trip/:dep_ref?/:dest_ref?/', {
       templateUrl: 'views/trip.html',
       controller: 'TripCtrl'
     })
@@ -48,4 +51,4 @@ angular.module('hellbergApp', [
     .otherwise({
       redirectTo: '/'
     });
-});
+}]);
