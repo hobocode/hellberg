@@ -31,10 +31,9 @@ angular.module('hellbergApp')
     scope: {
       route: '=route',                      // required
       width: '=width',                      // required
-      play: '=play',                        // required
       height: '=height',                    // required
+      play: '=play',                        // required
       maxPoints:'=maxPoints',               // required
-      fps: '=fps',                          // required
       lookat: '=lookat',                    // required
       onComplete: '&onComplete',            // required
       onProgress: '&onProgress',            // required
@@ -63,7 +62,7 @@ angular.module('hellbergApp')
     link: function (scope, element/*, attrs*/) {
       var el = angular.element(element);
 
-      var max_points = scope.max_points;
+      var max_points = scope.maxPoints;
 
       var hyperlapse = new Hyperlapse(el[0], {
         use_lookat: scope.lookat,
@@ -72,9 +71,8 @@ angular.module('hellbergApp')
         width: scope.width,
         height: scope.height,
         zoom: 1,
-        millis : 10.0/max_points*1000
+        millis : 10.0/max_points*1000 // 10 seconds
       });
-      /*jshint unused: true*/
 
       hyperlapse.onLoadProgress = function() {
         if (scope.onProgress) {
@@ -82,17 +80,14 @@ angular.module('hellbergApp')
         }
       };
 
-      /*jslint unparam: true*/
       hyperlapse.onError = function(/*e*/) {
         if (scope.onProgress) {
           scope.onProgress();
         }
         // console.log(e);
       };
-      /*jslint unparam: false*/
 
       hyperlapse.onRouteComplete = function() {
-        console.log('onRouteComplete', scope.onRouteComplete);
         if (scope.onRouteComplete) {
           scope.onRouteComplete();
         }
