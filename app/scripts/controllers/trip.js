@@ -1,164 +1,149 @@
 'use strict';
 
 angular.module('hellbergApp')
-  .controller('TripCtrl', ['$scope', '$routeParams', '$q', '$timeout', '$location', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack', function ($scope, $routeParams, $q, $timeout, $location, RouteLoader, Questions, Speak, Soundtrack) {
+  .controller('TripCtrl', ['$scope', '$q', '$timeout', '$location', 'State', 'RouteLoader', 'Questions', 'Speak', 'Soundtrack',
+    function ($scope, $q, $timeout, $location, State, RouteLoader, Questions, Speak, Soundtrack)
+{
+  var start, pause, play, loop;
 
-    $scope.points = 10;
-    $scope.loading = true;
-    $scope.indeterminate = true;
+  var NQUESTIONS = 5; // number of questions
+  var NPTS = 200; // number of points
+  var TIME = 50; // total time in seconds
+  var trip_time = 0;
+  var next_question_time = 0;
+  var questions;
+  var question_idx = NQUESTIONS-1;
 
-    RouteLoader.fetch($routeParams.dep_ref, $routeParams.dest_ref).then(function(res) {
+  $scope.points = NPTS;
+  $scope.loading = true;
+  $scope.indeterminate = true;
 
-      Soundtrack.play();
+  $scope.loader_progress = 0;
+  $scope.loader_total = NPTS;
 
-      Questions.fetch(res[0].name, res[1].name, [{
-        lng : res[0].geometry.location.lng(),
-        lat : res[0].geometry.location.lat()
-      }, {
-        lng : res[1].geometry.location.lng(),
-        lat : res[1].geometry.location.lat()
-      }]).then(function(questions) {
-        var hyperlapse;
-        var NUMBER_OF_QUESTIONS = 5;
-        var NPTS = 200; // number of points
-        var TIME = 50; // total time in seconds
+  $scope.width = window.innerWidth;
+  $scope.height = window.innerHeight;
 
-        $scope.loader_progress = 0;
-        $scope.loader_total = NPTS;
+  $scope.routeComplete = function() {
+    $scope.$apply(function() {
+      $scope.indeterminate = false;
+    });
+  }
 
+  $scope.progress = function() {
+    $scope.$apply(function() {
+      $scope.loader_progress = $scope.loader_progress+1;
+    });
+  }
 
-        var start = function() {
-          var play, pause, loop;
+  pause = function() {
+    $scope.paused = true;
+    $scope.show_input = true;
+  };
 
-          $scope.$apply(function() {
-            $scope.loading = false;
-          });
+  play = function() {
+    $scope.paused = false;
+    $scope.show_input = false;
+    loop();
+  };
 
-          var trip_time = 0;
-          var next_question_time = 0;
-          var paused = false, question_idx = NUMBER_OF_QUESTIONS-1;
+  $scope.brake = function() {
+    if ($scope.paused) {
+      play();
+    } else {
+      pause();
+    }
+    $('.brake').addClass('pull');
+    $timeout(function() {
+      $('.brake').removeClass('pull');
+    }, 100);
+  };
 
-          $scope.show_input = false;
-          $scope.show_result = false;
-
-
-          $scope.submit = function() {
-            var answer = $scope.answer;
-            var question = questions.get_question(question_idx);
-            var correct = question.validate_answer(answer);
-            if (correct) {
-              $location.path('/result/' + $scope.current_score + '/' + question.answer.answers[0] + '/');
-            } else {
-              $scope.show_wrong = true;
-              $scope.show_input = false;
-              $timeout(function() {
-                $scope.show_wrong = false;
-                $scope.answer = '';
-                play();
-              }, 3000);
-            }
-          };
-
-          pause = function() {
-            paused = true;
-            hyperlapse.pause();
-            Soundtrack.duck();
-            $scope.show_input = true;
-          };
-
-          play = function() {
-            paused = false;
-            loop();
-            Soundtrack.unduck();
-            hyperlapse.play();
-            $scope.show_input = false;
-          };
-
-          $scope.current_score = 2*(NUMBER_OF_QUESTIONS+1);
-          $scope.trip_progress = 0;
-          $scope.question = '';
-
-          $scope.brake = function() {
-            if (paused) {
-              play();
-            } else {
-              pause();
-            }
-            $('.brake').addClass('pull');
-            $timeout(function() {
-              $('.brake').removeClass('pull');
-            }, 100);
-          };
-
-          var td = 50;
-          loop = function() {
-            $scope.trip_progress = (trip_time/1000)/TIME*td*2;
-
-            trip_time += td;
-
-            if (trip_time >= next_question_time) {
-              next_question_time += TIME*1000/NUMBER_OF_QUESTIONS;
-              $scope.current_score -= 2;
-
-              if ($scope.current_score <= 0) {
-                var answer = questions.questions[0].answer.answers[0];
-                $location.path('/result/0/' + answer + '/');
-              } else {
-                var text = questions.get_question(question_idx--).question;
-                $scope.question = text;
-                // Speak.speak(text);
-              }
-            }
-
-            if (!paused && $scope.current_score > 0) {
-              $timeout(loop, td, true);
-            }
-
-          };
-          loop();
-        };
-
-        hyperlapse = new Hyperlapse(document.getElementById('pano'), {
-          use_lookat: false,
-          max_points: NPTS,
-          elevation: 50,
-          width: window.innerWidth,
-          height: window.innerHeight,
-          zoom: 1,
-          millis : TIME/NPTS*1000
-        });
-
-        hyperlapse.onLoadProgress = function() {
-          $scope.$apply(function() {
-            $scope.loader_progress++;
-          });
-        };
-
-        hyperlapse.onError = function(e) {
-          $scope.$apply(function() {
-            $scope.loader_progress++;
-          });
-
-          console.log(e);
-        };
-
-        hyperlapse.onRouteComplete = function() {
-          $scope.indeterminate = false;
-          hyperlapse.load();
-        };
-
-        hyperlapse.onLoadComplete = function() {
-          hyperlapse.play();
-          start();
-        };
-
-        hyperlapse.generate({route:res[2]});
+  $scope.submit = function() {
+    var answer = $scope.answer;
+    var question = questions.get_question(question_idx);
+    var correct = question.validate_answer(answer);
+    $scope.paused = true;
+    if (correct) {
+      State.score = $scope.current_score;
+      $location.path('/result/');
+    } else {
+      $scope.show_wrong = true;
+      $scope.show_input = false;
+      $timeout(function() {
+        $scope.show_wrong = false;
+        $scope.answer = '';
+        play();
+      }, 2000);
+    }
+  };
 
 
-      });
+  var td = 50;
+  loop = function() {
+    $scope.trip_progress = (trip_time/1000)/TIME*td*2;
 
+    trip_time += td;
 
+    if (trip_time >= next_question_time) {
+      next_question_time += TIME*1000/NQUESTIONS;
+      $scope.current_score -= 2;
+
+      if ($scope.current_score <= 0) {
+        State.score = $scope.current_score;
+        $location.path('/result/');
+      } else {
+        var text = questions.get_question(question_idx--).question;
+        $scope.question = text;
+        // Speak.speak(text);
+      }
+    }
+
+    if (!$scope.paused && $scope.current_score > 0) {
+      $timeout(loop, td, true);
+    }
+
+  };
+
+  $scope.start = function() {
+    Soundtrack.play();
+    $scope.loading = false;
+
+    $scope.paused = false;
+
+    $scope.show_input = false;
+    $scope.show_result = false;
+
+    $scope.current_score = 2*(NQUESTIONS+1);
+    $scope.trip_progress = 0;
+    $scope.question = '';
+
+    loop();
+  };
+
+  RouteLoader.fetch(State.dep_ref, State.dest_ref).then(function(res) {
+    var dest, dep, destloc, deploc;
+    dep = res[0];
+    dest = res[1];
+    deploc = dep.geometry.location;
+    destloc = dest.geometry.location;
+
+    State.dep = dep;
+    State.dest = dest;
+
+    Questions.fetch(dep.name, dest.name, [{
+      lng : deploc.lng(),
+      lat : destloc.lat()
+    }, {
+      lng : destloc.lng(),
+      lat : destloc.lat()
+    }]).then(function(qobj) {
+      questions = qobj;
+
+      State.route = res[2];
+      $scope.route = res[2];
     });
 
+  });
 
-  }]);
+}]);

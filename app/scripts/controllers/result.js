@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('hellbergApp')
-  .controller('ResultCtrl', ['$scope', '$location', '$routeParams', 'Soundtrack', function($scope, $location, $routeParams, Soundtrack) {
-    $scope.score = $routeParams.score;
-    $scope.answer = $routeParams.answer;
+  .controller('ResultCtrl', ['$scope', '$location', 'State', 'Soundtrack', function($scope, $location, State, Soundtrack) {
+    $scope.score = State.score;
+    $scope.answer = State.dest.name;
 
     Soundtrack.unduck();
 
