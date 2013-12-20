@@ -64,12 +64,16 @@ angular.module('hellbergApp')
 
       var max_points = scope.maxPoints;
 
+      var to_bool = function(val) {
+        return ['true', 't', 'yes', 'y', true].indexOf(val) >= 0;
+      };
+
       var hyperlapse = new Hyperlapse(el[0], {
-        use_lookat: scope.lookat,
-        max_points: max_points,
+        use_lookat: to_bool(scope.lookat),
+        max_points: parseInt(max_points, 10),
         elevation: 50,
-        width: scope.width,
-        height: scope.height,
+        width: parseInt(scope.width, 10),
+        height: parseInt(scope.height, 10),
         zoom: 1,
         millis : 10.0/max_points*1000 // 10 seconds
       });

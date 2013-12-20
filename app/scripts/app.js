@@ -21,19 +21,6 @@ angular.module('hellbergApp', [
 .constant('GLOBALS', {
   debug : true
 })
-.directive('focusMe', function() {
-  return {
-    scope: { trigger: '=focusMe' },
-    link: function(scope, element) {
-      scope.$watch('trigger', function(value) {
-        if(value === true) {
-          element[0].focus();
-          scope.trigger = false;
-        }
-      });
-    }
-  };
-})
 .config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/', {
