@@ -50,6 +50,7 @@ angular.module('hellbergApp').factory('Questions', ['$http', '$q', 'LOCALE', 'Wi
       var foursquare_questions = res[1];
 
       question_set = Hellberg.QuestionSet.union(wikipedia_questions, foursquare_questions);
+      question_set = question_set.increasing_difficulty_set(5);
 
       dfd.resolve(question_set);
     });

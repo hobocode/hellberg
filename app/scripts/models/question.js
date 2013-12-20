@@ -29,6 +29,22 @@
   //   return (this.index + 1) * 2;
   // };
 
+  Question.prototype.get_diffucilty = function() {
+
+    var adjust = function( adj, min, max ) {
+      if ( isNaN( min ) ) {
+        min = -Infinity;
+      }
+
+      if ( isNaN( max ) ) {
+        max = Infinity;
+      }
+      return adj < min ? min : adj > max ? max : adj;
+    };
+
+    return adjust(this.difficulty, 0.0, 0.99999999999999999);
+  };
+
   Question.prototype.validate_answer = function(answer) {
     return this.answer.validate_answer(answer);
   };

@@ -67,7 +67,7 @@ angular.module('hellbergApp').factory('Wikipedia', ['$http', '$q', 'LOCALE', fun
           for (var i = 0; i < sentences.length; i++) {
             var sentence = sentences[i];
 
-            var difficulty = i / (sentences.length - 1);
+            var difficulty = i / sentences.length;
 
             if (sentence.match(/%s/gi) && sentence.length > sentence_min_length) {
 

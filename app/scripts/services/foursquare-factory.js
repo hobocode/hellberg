@@ -35,13 +35,12 @@ angular.module('hellbergApp').factory('Foursquare', ['$http', '$q', function($ht
         var name = venue_data.venue.name;
         var category = venue_data.venue.categories[0].name;
 
-        var difficulty = map_difficulty(idx / (venues.length - 1), 0.2, 0.8);
-        console.log(difficulty);
+        var difficulty = map_difficulty(idx / venues.length, 0.2, 0.8);
 
         var lname = name.toLowerCase();
         for (var i = answer.answers.length - 1; i >= 0; i--) {
           var a = answer.answers[i].toLowerCase();
-          if (lname.indexOf(a)) {
+          if (lname.indexOf(a) !== -1) {
             difficulty = 0.0;
           }
         }
